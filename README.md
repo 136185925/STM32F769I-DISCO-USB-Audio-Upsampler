@@ -125,7 +125,7 @@ The FIR does not replace the IIR low-pass filter,  but instead approximately cor
 - External SDRAM is not used
 At the end of the WAV,  zero values continue to be fed in,  allowing the IIR recursive response to decay,  and the FIR history is cleared.
 
-## 4X HYBRID
+## 4X HYB NS2
 Use second-order error feedback: NTF = (1 − z⁻¹)²
 
 Automatically clear noise-shaping history upon saturation
