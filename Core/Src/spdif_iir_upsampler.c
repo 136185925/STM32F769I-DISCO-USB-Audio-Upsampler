@@ -109,6 +109,41 @@ static int16_t SPDIF_IirUpsampler4x_Quantize(float value,
   return (int16_t)rounded;
 }
 
+static int16_t SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
+    float value, uint32_t *dither_state, float error[2])
+{
+  /* With error defined as y[n]-v[n], subtracting 2e[n-1]-e[n-2]
+   * produces y=x+(1-z^-1)^2e. Include the non-subtractive TPDF in this
+   * error so its energy is shaped together with the rounding residue. */
+  const float shaped = value - 2.0f * error[0] + error[1];
+  const float quantizer_input =
+      shaped + SPDIF_IirUpsampler4x_Tpdf(dither_state);
+  int32_t rounded;
+
+  /* HYBRID already has -1 dB headroom. Any rail hit is therefore treated as
+   * overload: saturate and discard the error history to prevent wind-up and
+   * the multi-sample burst that would otherwise follow a clipped transient. */
+  if (quantizer_input >= 32767.0f)
+  {
+    error[0] = 0.0f;
+    error[1] = 0.0f;
+    return 32767;
+  }
+  if (quantizer_input <= -32768.0f)
+  {
+    error[0] = 0.0f;
+    error[1] = 0.0f;
+    return -32768;
+  }
+
+  rounded = (quantizer_input >= 0.0f) ?
+      (int32_t)(quantizer_input + 0.5f) :
+      (int32_t)(quantizer_input - 0.5f);
+  error[1] = error[0];
+  error[0] = (float)rounded - shaped;
+  return (int16_t)rounded;
+}
+
 void SPDIF_IirUpsampler4x_Reset(SPDIF_IirUpsampler4x *state)
 {
   if (state == NULL) return;
@@ -189,6 +224,8 @@ void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state)
   SPDIF_IirUpsampler4x_Reset(&state->iir);
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
+  memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
+  memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
   state->write_index = 0U;
 }
 
@@ -202,12 +239,14 @@ void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
                                 spdif_phase_coefficients_192k;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
+  memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
+  memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
   state->write_index = 0U;
 }
 
-void SPDIF_HybridUpsampler4x_Process(
+static void SPDIF_HybridUpsampler4x_ProcessInternal(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
-    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U], uint8_t noise_shaping)
 {
   float iir_output[SPDIF_UPSAMPLER_FACTOR * 2U];
   SPDIF_IirUpsampler4x_ProcessFloat(&state->iir, left, right, iir_output);
@@ -245,11 +284,39 @@ void SPDIF_HybridUpsampler4x_Process(
       right_current -= 4;
     }
 
-    output[phase * 2U] = SPDIF_IirUpsampler4x_Quantize(
-        left_accumulator, &state->iir.dither_left);
-    output[phase * 2U + 1U] = SPDIF_IirUpsampler4x_Quantize(
-        right_accumulator, &state->iir.dither_right);
+    if (noise_shaping != 0U)
+    {
+      output[phase * 2U] =
+          SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
+              left_accumulator, &state->iir.dither_left,
+              state->noise_error_left);
+      output[phase * 2U + 1U] =
+          SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
+              right_accumulator, &state->iir.dither_right,
+              state->noise_error_right);
+    }
+    else
+    {
+      output[phase * 2U] = SPDIF_IirUpsampler4x_Quantize(
+          left_accumulator, &state->iir.dither_left);
+      output[phase * 2U + 1U] = SPDIF_IirUpsampler4x_Quantize(
+          right_accumulator, &state->iir.dither_right);
+    }
     state->write_index = (uint8_t)((write + 1U) &
                                    (SPDIF_HYBRID_PHASE_TAPS - 1U));
   }
+}
+
+void SPDIF_HybridUpsampler4x_Process(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
+{
+  SPDIF_HybridUpsampler4x_ProcessInternal(state, left, right, output, 0U);
+}
+
+void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
+{
+  SPDIF_HybridUpsampler4x_ProcessInternal(state, left, right, output, 1U);
 }

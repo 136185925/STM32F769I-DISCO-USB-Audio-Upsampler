@@ -33,6 +33,9 @@ typedef struct
   float left_history[SPDIF_HYBRID_PHASE_TAPS * 2U];
   float right_history[SPDIF_HYBRID_PHASE_TAPS * 2U];
   const float *phase_coefficients;
+  /* Previous total quantization errors for optional (1-z^-1)^2 shaping. */
+  float noise_error_left[2];
+  float noise_error_right[2];
   uint8_t write_index;
 } SPDIF_HybridUpsampler4x;
 
@@ -56,6 +59,13 @@ void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state);
  * phase equalizer inserted before quantization. The combined passband group
  * delay targets 44 output samples and is optimized through 18 kHz. */
 void SPDIF_HybridUpsampler4x_Process(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
+
+/* HYBRID with second-order error-feedback noise shaping after its phase FIR.
+ * TPDF remains enabled, but the combined dither and rounding error follows
+ * the (1-z^-1)^2 noise-transfer function. Saturation clears both histories. */
+void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 

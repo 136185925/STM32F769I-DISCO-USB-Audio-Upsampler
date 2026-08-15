@@ -233,7 +233,10 @@ void USB_Audio_CreateResources(void)
       USB_AUDIO_SPDIF_BKP_MAGIC)
   {
     const uint32_t saved_mode = saved_spdif & 0xFFU;
-    if (saved_mode == (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)
+    if (saved_mode ==
+        (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2)
+      usb_audio_spdif_mode = USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2;
+    else if (saved_mode == (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)
       usb_audio_spdif_mode = USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID;
     else if (saved_mode == (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR)
       usb_audio_spdif_mode = USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR;
@@ -348,7 +351,9 @@ USB_AudioHostMode USB_Audio_GetHostMode(void)
 void USB_Audio_RequestSpdifMode(USB_AudioSpdifMode mode)
 {
   USB_AudioSpdifMode requested = USB_AUDIO_SPDIF_NATIVE;
-  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)
+  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2)
+    requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2;
+  else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID;
   else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR;
@@ -604,6 +609,13 @@ static uint32_t USB_Audio_FillDmaHalf(uint8_t half)
         {
           SPDIF_IirUpsampler4x_Process(&usb_audio_spdif_iir_upsampler,
               source.left, source.right, interpolated);
+        }
+        else if (usb_audio_prepared_spdif_mode ==
+                 USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2)
+        {
+          SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
+              &usb_audio_spdif_hybrid_upsampler, source.left, source.right,
+              interpolated);
         }
         else if (usb_audio_prepared_spdif_mode ==
                  USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)
