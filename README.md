@@ -3,10 +3,6 @@ Use the USB OTG interface for input as a computer sound card，use the SPDIF int
 
 The original intention of this project was to address R2R 16bit audio，or to design some high-fidelity asynchronous USB interfaces in USB that can preserve the original audio information
 
-known issue: Due to the non-audio clock, the buffer may be exhausted after 8 minutes, which may possibly be resolved later by making an Arduino Shield with an external audio crystal oscillator. After the buffer is exhausted there will be a slight stutter to wait for 8192 frames of data to fill up before playback continues
-
-Update: A slider has been added to the settings options to control the startup buffer time，for SPDIF 44.1kHz it is recommended to slide it toward the 30720 end (If you have no requirements for audio startup latency)，for SPDIF 48kHz, WM8994 44.1kHz, WM8994 48kHz slide it toward the 6144-frame end (Usually Windows WASAPI will automatically switch between 44.1kHz or 48kHz depending on the audio files, so it is recommended that when using SPDIF you move the slider to the middle position, so that even over long periods of time there will be no buffer overflow or underrun issues)
-
 Support: Linux / UAC1 asynchronous audio, Windows /UAC2 asynchronous audio interface
 Input: 16bit 44.1kHz/ 48kHz，WM8994 supports local music playback，
 
@@ -163,3 +159,7 @@ PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete
 - Want to combine IIR cutoff characteristics with approximate phase correction: HYBRID
 
 ## When using it, don't forget to switch the 5V power input jumper on the circuit board to USB-OTG
+
+known issue: Due to the non-audio clock, the buffer may be exhausted after 8 minutes, which may possibly be resolved later by making an Arduino Shield with an external audio crystal oscillator. After the buffer is exhausted there will be a slight stutter to wait for 8192 frames of data to fill up before playback continues
+
+Update: A slider has been added to the settings options to control the startup buffer time，for SPDIF 44.1kHz it is recommended to slide it toward the 30720 end (If you have no requirements for audio startup latency)，for SPDIF 48kHz, WM8994 44.1kHz, WM8994 48kHz slide it toward the 6144-frame end (Usually Windows WASAPI will automatically switch between 44.1kHz or 48kHz depending on the audio files, so it is recommended that when using SPDIF you move the slider to the middle position, so that even over long periods of time there will be no buffer overflow or underrun issues)
