@@ -16,6 +16,8 @@ SPDIF 44.1Khz
 PLLI2S 271/2/6
 44.1 kHz actual approximately 44108.07 Hz，+183.06 ppm
 
+![System Diagram](images/system_diagram.jpg)
+
 # STM32F769I-DISCO S/PDIF 4× Upsampling Algorithms
 This project provides multiple native playback and 4× upsampling algorithms for S/PDIF output, which can be switched in the SETTINGS application.
 
