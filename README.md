@@ -34,6 +34,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | 4X TPDF | Nyquist FIR | −1 dB | Four-phase TPDF | Linear phase | Medium |
 | 4X IIR | 14th-order IIR | −1 dB | Four-phase TPDF | Nonlinear phase | Medium-high |
 | HYBRID | 14th-order IIR + 32-tap FIR | −1 dB | Four-phase TPDF | Approximately fixed group delay | Highest |
+| HYBRID NS2 | 14th-order IIR + 32-tap FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
 ---
 
 ## NATIVE
@@ -123,6 +124,16 @@ The FIR does not replace the IIR low-pass filter,  but instead approximately cor
 - Runtime state is located in internal DTCM
 - External SDRAM is not used
 At the end of the WAV,  zero values continue to be fed in,  allowing the IIR recursive response to decay,  and the FIR history is cleared.
+
+## 4X HYBRID
+Use second-order error feedback: NTF = (1 − z⁻¹)²
+
+Automatically clear noise-shaping history upon saturation
+
+Does not clear the IIR/FIR filter history, so it will not restart the entire filter or interrupt the audio stream
+
+PCM → −1 dB → 4×zero insertion → 14th-order Chebyshev-I IIR → 32-tap FIR phase equalization → four-phase TPDF + 2nd order Noise shaping → 16-bit quantization → S/PDIF
+
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline,  the filtering algorithm will not change the S/PDIF clock edges.
