@@ -116,10 +116,10 @@ Performance optimization:
   External SDRAM is not used
 At the end of the WAV, zero values continue to be fed in, allowing the IIR recursive response to decay, and the FIR history is cleared.
 
-Phase and Clock Jitter
+## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline, the filtering algorithm will not change the S/PDIF clock edges.
 Insufficient performance may cause:
-  DMA underrun
+# DMA underrun
   Repetition of the old buffer
   PCM timeline jumps
   Pops or stuttering
@@ -132,13 +132,13 @@ The current S/PDIF DMA configuration is:
   INCR4 Memory Burst
   Independent PLLI2S clock
 
-Recommended choice
-Lowest CPU usage: NATIVE
-Simple 4x output and algorithm testing: 4X HOLD
-Linear phase while preserving the original Phase0: 4X EXACT
-Linear phase with peak headroom reserved: 4X -1DB
-Recommended FIR upsampling mode: 4X TPDF
-Prefer IIR sound characteristics and shorter group delay: 4X IIR
-Want to combine IIR cutoff characteristics with approximate phase correction: HYBRID
+## Recommended choice
+  Lowest CPU usage: NATIVE
+  Simple 4x output and algorithm testing: 4X HOLD
+  Linear phase while preserving the original Phase0: 4X EXACT
+  Linear phase with peak headroom reserved: 4X -1DB
+  Recommended FIR upsampling mode: 4X TPDF
+  Prefer IIR sound characteristics and shorter group delay: 4X IIR
+  Want to combine IIR cutoff characteristics with approximate phase correction: HYBRID
 
-When using it, don't forget to switch the 5V power input jumper on the circuit board to USB-OTG
+## When using it, don't forget to switch the 5V power input jumper on the circuit board to USB-OTG
