@@ -5,6 +5,8 @@ The original intention of this project was to address R2R 16bit audio，or to de
 
 known issue: Due to the non-audio clock, the buffer may be exhausted after 8 minutes, which may possibly be resolved later by making an Arduino Shield with an external audio crystal oscillator. After the buffer is exhausted there will be a slight stutter to wait for 8192 frames of data to fill up before playback continues
 
+Update: A slider has been added to the settings options to control the startup buffer time，for SPDIF 44.1kHz it is recommended to slide it toward the 30720 end (If you have no requirements for audio startup latency)，for SPDIF 48kHz, WM8994 44.1kHz, WM8994 48kHz slide it toward the 6144-frame end
+
 Support: Linux / UAC1 asynchronous audio, Windows /UAC2 asynchronous audio interface
 Input: 16bit 44.1kHz/ 48kHz，WM8994 supports local music playback，
 
