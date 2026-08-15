@@ -65,6 +65,7 @@ public:
     void setFileScroll(uint8_t offset);
     void setMusicScroll(uint8_t offset);
     void setMusicDetail(uint8_t detail);
+    void setSettingsScroll(int16_t offset);
     void invalidateFiles();
     void invalidateMusic();
     void invalidateSystemUsage();
@@ -73,6 +74,7 @@ public:
     void invalidateSpectrum();
     void invalidateSettings();
     void invalidateSettingsGain();
+    void invalidateSettingsStartBuffer();
     void calculatorPress(char key);
     void setCalculatorPressedKey(char key);
     virtual void draw(const touchgfx::Rect& invalidatedArea) const;
@@ -101,6 +103,7 @@ private:
     uint8_t fileScroll;
     uint8_t musicScroll;
     uint8_t musicDetail;
+    int16_t settingsScroll;
     char calculatorInput[24];
     char calculatorHistory[56];
     uint8_t calculatorLength;
@@ -171,6 +174,8 @@ private:
     uint8_t musicScrollStart;
     uint8_t musicWavCount;
     bool musicDetail;
+    int16_t settingsScroll;
+    int16_t settingsScrollStart;
     uint32_t lastStopwatchRenderSlot;
     uint32_t lastStopwatchControlGeneration;
     uint32_t lastStorageGeneration;

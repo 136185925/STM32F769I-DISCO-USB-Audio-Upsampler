@@ -50,6 +50,13 @@ const uint8_t APP_COLORS[16][3] = {
 
 const int16_t ICON_X[4] = {70, 250, 430, 610};
 const int16_t ICON_Y[2] = {112, 272};
+const int16_t SETTINGS_VIEW_TOP = 112;
+const int16_t SETTINGS_VIEW_BOTTOM = 447;
+const int16_t SETTINGS_CONTENT_BOTTOM = 655;
+const int16_t SETTINGS_SCROLL_MAX =
+    SETTINGS_CONTENT_BOTTOM - SETTINGS_VIEW_BOTTOM;
+const int16_t SETTINGS_BUFFER_SLIDER_X = 220;
+const int16_t SETTINGS_BUFFER_SLIDER_WIDTH = 430;
 
 colortype rgb(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -62,6 +69,46 @@ uint8_t settingsGainFromX(int16_t x)
     if (x >= 610) return 100U;
     return static_cast<uint8_t>(
         ((static_cast<uint32_t>(x - 220) * 100U) + 195U) / 390U);
+}
+
+uint32_t settingsStartFramesFromX(int16_t x)
+{
+    if (x <= SETTINGS_BUFFER_SLIDER_X) return USB_AUDIO_START_FRAMES_MIN;
+    if (x >= SETTINGS_BUFFER_SLIDER_X + SETTINGS_BUFFER_SLIDER_WIDTH) {
+        return USB_AUDIO_START_FRAMES_MAX;
+    }
+    const uint32_t stepCount =
+        (USB_AUDIO_START_FRAMES_MAX - USB_AUDIO_START_FRAMES_MIN) /
+        USB_AUDIO_START_FRAMES_STEP;
+    const uint32_t selectedStep =
+        (static_cast<uint32_t>(x - SETTINGS_BUFFER_SLIDER_X) * stepCount +
+         SETTINGS_BUFFER_SLIDER_WIDTH / 2U) /
+        SETTINGS_BUFFER_SLIDER_WIDTH;
+    return USB_AUDIO_START_FRAMES_MIN +
+           selectedStep * USB_AUDIO_START_FRAMES_STEP;
+}
+
+int16_t settingsStartFramesToX(uint32_t frames)
+{
+    if (frames < USB_AUDIO_START_FRAMES_MIN) frames = USB_AUDIO_START_FRAMES_MIN;
+    if (frames > USB_AUDIO_START_FRAMES_MAX) frames = USB_AUDIO_START_FRAMES_MAX;
+    return static_cast<int16_t>(SETTINGS_BUFFER_SLIDER_X +
+        ((frames - USB_AUDIO_START_FRAMES_MIN) *
+         SETTINGS_BUFFER_SLIDER_WIDTH) /
+        (USB_AUDIO_START_FRAMES_MAX - USB_AUDIO_START_FRAMES_MIN));
+}
+
+Rect clippedRect(const Rect& source, const Rect& clip)
+{
+    int16_t left = source.x > clip.x ? source.x : clip.x;
+    int16_t top = source.y > clip.y ? source.y : clip.y;
+    int16_t right = source.right() < clip.right() ?
+                    source.right() : clip.right();
+    int16_t bottom = source.bottom() < clip.bottom() ?
+                     source.bottom() : clip.bottom();
+    if (right <= left || bottom <= top) return Rect(0, 0, 0, 0);
+    return Rect(left, top, static_cast<int16_t>(right - left),
+                static_cast<int16_t>(bottom - top));
 }
 
 void formatStopwatchTicks(uint32_t ticks, char output[12])
@@ -768,6 +815,7 @@ void DesktopIconWidget::draw(const Rect& dirty) const
 AppPanelWidget::AppPanelWidget()
     : appIndex(0), label("APP"), accentR(68), accentG(115), accentB(220),
       stopwatchLapScroll(0), fileScroll(0), musicScroll(0), musicDetail(0),
+      settingsScroll(0),
       calculatorLength(1U), calculatorAccumulator(0.0), calculatorOperation(0),
       calculatorPressedKey(0), calculatorReplaceInput(false), calculatorError(false)
 {
@@ -836,14 +884,21 @@ void AppPanelWidget::invalidateSpectrum()
 
 void AppPanelWidget::invalidateSettings()
 {
-    Rect settingsArea(30, 108, 740, 336);
+    Rect settingsArea(20, SETTINGS_VIEW_TOP, 765,
+                      SETTINGS_VIEW_BOTTOM - SETTINGS_VIEW_TOP);
     invalidateRect(settingsArea);
 }
 
 void AppPanelWidget::invalidateSettingsGain()
 {
-    Rect gainArea(110, 338, 580, 30);
+    Rect gainArea(110, static_cast<int16_t>(364 - settingsScroll), 580, 40);
     invalidateRect(gainArea);
+}
+
+void AppPanelWidget::invalidateSettingsStartBuffer()
+{
+    Rect bufferArea(115, static_cast<int16_t>(548 - settingsScroll), 570, 88);
+    invalidateRect(bufferArea);
 }
 
 void AppPanelWidget::resetCalculator()
@@ -1074,6 +1129,15 @@ void AppPanelWidget::setMusicDetail(uint8_t detail)
     if (musicDetail == detail) return;
     musicDetail = detail;
     invalidateMusic();
+}
+
+void AppPanelWidget::setSettingsScroll(int16_t offset)
+{
+    if (offset < 0) offset = 0;
+    if (offset > SETTINGS_SCROLL_MAX) offset = SETTINGS_SCROLL_MAX;
+    if (settingsScroll == offset) return;
+    settingsScroll = offset;
+    invalidateSettings();
 }
 
 void AppPanelWidget::drawStopwatch(const Rect& dirty) const
@@ -1343,6 +1407,7 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
     USB_AudioSnapshot audio;
     USB_MSC_GetSnapshot(&msc);
     USB_Audio_GetSnapshot(&audio);
+
     const colortype white = rgb(244, 248, 255);
     const colortype muted = rgb(142, 159, 190);
     const colortype surface = rgb(19, 28, 44);
@@ -1350,184 +1415,312 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
     const colortype green = rgb(59, 213, 154);
     const colortype amber = rgb(245, 181, 66);
     const colortype red = rgb(239, 83, 101);
+    const colortype track = rgb(44, 55, 75);
+    const int16_t offset = settingsScroll;
+    const Rect contentDirty = clippedRect(
+        dirty, Rect(20, SETTINGS_VIEW_TOP, 765,
+                    SETTINGS_VIEW_BOTTOM - SETTINGS_VIEW_TOP));
 
-    fillRounded(35, 118, 730, 91, 17, surface, dirty);
-    fillRounded(53, 136, 52, 52, 13, rgb(40, 91, 117), dirty);
-    drawText("SD", 65, 153, 2, cyan, dirty);
-    drawText("USB HS SD CARD READER", 122, 132, 2, white, dirty);
-    drawText("MASS STORAGE - EJECT ON COMPUTER BEFORE SWITCHING OFF",
-             122, 164, 1, amber, dirty);
-    drawText(msc.card_present != 0U ? "SD MEDIA PRESENT" : "NO SD MEDIA",
-             122, 184, 1, msc.card_present != 0U ? muted : amber, dirty);
+    /* The app header remains fixed while these cards move under a clipped
+       viewport. This avoids a large nested ScrollableContainer and keeps the
+       existing procedural/DMA2D rendering path. */
+    if (contentDirty.width > 0 && contentDirty.height > 0) {
+        fillRounded(35, static_cast<int16_t>(118 - offset), 730, 91, 17,
+                    surface, contentDirty);
+        fillRounded(53, static_cast<int16_t>(136 - offset), 52, 52, 13,
+                    rgb(40, 91, 117), contentDirty);
+        drawText("SD", 65, static_cast<int16_t>(153 - offset), 2, cyan,
+                 contentDirty);
+        drawText("USB HS SD CARD READER", 122,
+                 static_cast<int16_t>(132 - offset), 2, white, contentDirty);
+        drawText("EJECT ON COMPUTER BEFORE SWITCHING OFF", 122,
+                 static_cast<int16_t>(164 - offset), 1, amber, contentDirty);
+        drawText(msc.card_present != 0U ? "SD MEDIA PRESENT" : "NO SD MEDIA",
+                 122, static_cast<int16_t>(184 - offset), 1,
+                 msc.card_present != 0U ? muted : amber, contentDirty);
 
-    const bool mscOn = msc.requested != 0U;
-    fillRounded(659, 143, 78, 38, 19,
-                mscOn ? green : rgb(62, 73, 94), dirty);
-    fillRounded(mscOn ? 703 : 665, 148, 28, 28, 14, white, dirty);
+        const bool mscOn = msc.requested != 0U;
+        fillRounded(659, static_cast<int16_t>(143 - offset), 78, 38, 19,
+                    mscOn ? green : rgb(62, 73, 94), contentDirty);
+        fillRounded(mscOn ? 703 : 665,
+                    static_cast<int16_t>(148 - offset), 28, 28, 14, white,
+                    contentDirty);
 
-    fillRounded(35, 219, 730, 158, 17, surface, dirty);
-    fillRounded(53, 237, 52, 52, 13, rgb(92, 58, 123), dirty);
-    drawText("AU", 63, 254, 2, rgb(194, 132, 255), dirty);
-    drawText("USB AUDIO OUTPUT", 122, 233, 2, white, dirty);
-    drawText("44.1 / 48 KHZ / 16 BIT / ASYNC FB / SAI DMA",
-             122, 258, 1, muted, dirty);
+        /* USB Audio card. Controls are spaced vertically so every row keeps
+           a distinct touch target after scrolling. */
+        fillRounded(35, static_cast<int16_t>(220 - offset), 730, 280, 17,
+                    surface, contentDirty);
+        fillRounded(53, static_cast<int16_t>(238 - offset), 52, 52, 13,
+                    rgb(92, 58, 123), contentDirty);
+        drawText("AU", 63, static_cast<int16_t>(255 - offset), 2,
+                 rgb(194, 132, 255), contentDirty);
+        drawText("USB AUDIO OUTPUT", 122,
+                 static_cast<int16_t>(234 - offset), 2, white, contentDirty);
+        drawText("44.1 / 48 KHZ / 16 BIT / ASYNC FB / SAI DMA", 122,
+                 static_cast<int16_t>(260 - offset), 1, muted, contentDirty);
 
-    const bool audioOn = audio.requested != 0U;
-    fillRounded(659, 244, 78, 38, 19,
-                audioOn ? green : rgb(62, 73, 94), dirty);
-    fillRounded(audioOn ? 703 : 665, 249, 28, 28, 14, white, dirty);
+        const bool audioOn = audio.requested != 0U;
+        fillRounded(659, static_cast<int16_t>(241 - offset), 78, 38, 19,
+                    audioOn ? green : rgb(62, 73, 94), contentDirty);
+        fillRounded(audioOn ? 703 : 665,
+                    static_cast<int16_t>(246 - offset), 28, 28, 14, white,
+                    contentDirty);
 
-    const bool windowsHost = audio.host_mode == USB_AUDIO_HOST_WINDOWS;
-    drawText("HOST", 122, 283, 1, muted, dirty);
-    fillRounded(220, 275, 174, 27, 9,
-                windowsHost ? rgb(44, 55, 75) : rgb(40, 113, 132), dirty);
-    fillRounded(402, 275, 174, 27, 9,
-                windowsHost ? rgb(65, 94, 145) : rgb(44, 55, 75), dirty);
-    drawText("LINUX / UAC1", 244, 283, 1,
-             windowsHost ? muted : white, dirty);
-    drawText("WINDOWS / UAC2", 420, 283, 1,
-             windowsHost ? white : muted, dirty);
+        const bool windowsHost = audio.host_mode == USB_AUDIO_HOST_WINDOWS;
+        drawText("HOST", 122, static_cast<int16_t>(299 - offset), 1, muted,
+                 contentDirty);
+        fillRounded(220, static_cast<int16_t>(290 - offset), 174, 29, 9,
+                    windowsHost ? track : rgb(40, 113, 132), contentDirty);
+        fillRounded(402, static_cast<int16_t>(290 - offset), 174, 29, 9,
+                    windowsHost ? rgb(65, 94, 145) : track, contentDirty);
+        drawText("LINUX / UAC1", 244, static_cast<int16_t>(299 - offset), 1,
+                 windowsHost ? muted : white, contentDirty);
+        drawText("WINDOWS / UAC2", 420, static_cast<int16_t>(299 - offset), 1,
+                 windowsHost ? white : muted, contentDirty);
 
-    const bool spdifOutput = audio.output == USB_AUDIO_OUTPUT_SPDIF;
-    drawText("OUTPUT", 122, 314, 1, muted, dirty);
-    fillRounded(220, 306, 174, 27, 9,
-                spdifOutput ? rgb(44, 55, 75) : rgb(40, 113, 132), dirty);
-    fillRounded(402, 306, 174, 27, 9,
-                spdifOutput ? rgb(92, 58, 123) : rgb(44, 55, 75), dirty);
-    drawText("WM8994 LINE", 242, 314, 1,
-             spdifOutput ? muted : white, dirty);
-    drawText("S/PDIF CN8", 430, 314, 1,
-             spdifOutput ? white : muted, dirty);
+        const bool spdifOutput = audio.output == USB_AUDIO_OUTPUT_SPDIF;
+        drawText("OUTPUT", 122, static_cast<int16_t>(337 - offset), 1, muted,
+                 contentDirty);
+        fillRounded(220, static_cast<int16_t>(328 - offset), 174, 29, 9,
+                    spdifOutput ? track : rgb(40, 113, 132), contentDirty);
+        fillRounded(402, static_cast<int16_t>(328 - offset), 174, 29, 9,
+                    spdifOutput ? rgb(92, 58, 123) : track, contentDirty);
+        drawText("WM8994 LINE", 242, static_cast<int16_t>(337 - offset), 1,
+                 spdifOutput ? muted : white, contentDirty);
+        drawText("S/PDIF CN8", 430, static_cast<int16_t>(337 - offset), 1,
+                 spdifOutput ? white : muted, contentDirty);
 
-    if (spdifOutput) {
-        const bool repeat =
-            audio.spdif_mode == USB_AUDIO_SPDIF_REPEAT_4X;
-        const bool exact =
-            audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X;
-        const bool headroom =
-            audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HEADROOM;
-        const bool tpdf =
-            audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_TPDF;
-        const bool iir =
-            audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR;
-        const bool hybrid =
-            audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID;
-        drawText("S/PDIF MODE", 122, 349, 1, muted, dirty);
-        fillRounded(220, 337, 48, 27, 9,
-                    (repeat || exact || headroom || tpdf || iir || hybrid) ?
-                        rgb(44, 55, 75) : rgb(40, 113, 132), dirty);
-        fillRounded(272, 337, 48, 27, 9,
-                    repeat ? rgb(35, 125, 103) : rgb(44, 55, 75), dirty);
-        fillRounded(324, 337, 48, 27, 9,
-                    exact ? rgb(92, 58, 123) : rgb(44, 55, 75), dirty);
-        fillRounded(376, 337, 48, 27, 9,
-                    headroom ? rgb(160, 105, 38) : rgb(44, 55, 75), dirty);
-        fillRounded(428, 337, 48, 27, 9,
-                    tpdf ? rgb(153, 62, 128) : rgb(44, 55, 75), dirty);
-        fillRounded(480, 337, 48, 27, 9,
-                    iir ? rgb(46, 105, 154) : rgb(44, 55, 75), dirty);
-        fillRounded(532, 337, 44, 27, 9,
-                    hybrid ? rgb(45, 126, 142) : rgb(44, 55, 75), dirty);
-        drawText("NATIVE", 226, 345, 1,
-                 (repeat || exact || headroom || tpdf || iir || hybrid) ?
-                     muted : white, dirty);
-        drawText("4X HOLD", 275, 345, 1, repeat ? white : muted, dirty);
-        drawText("4X EXACT", 324, 345, 1, exact ? white : muted, dirty);
-        drawText("4X -1DB", 379, 345, 1, headroom ? white : muted, dirty);
-        drawText("4X TPDF", 431, 345, 1, tpdf ? white : muted, dirty);
-        drawText("4X IIR", 486, 345, 1, iir ? white : muted, dirty);
-        drawText("HYBRID", 536, 345, 1, hybrid ? white : muted, dirty);
-    } else {
-        char gainText[5];
-        formatPercent(audio.volume, 100U, gainText);
-        drawText("HW GAIN", 122, 349, 1, muted, dirty);
-        fillRounded(220, 345, 390, 14, 7, rgb(44, 55, 75), dirty);
-        const int16_t gainWidth = static_cast<int16_t>(
-            (static_cast<uint32_t>(audio.volume) * 390U) / 100U);
-        if (gainWidth > 0) {
-            fillRounded(220, 345, gainWidth, 14, 7, cyan, dirty);
+        if (spdifOutput) {
+            const bool repeat =
+                audio.spdif_mode == USB_AUDIO_SPDIF_REPEAT_4X;
+            const bool exact =
+                audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X;
+            const bool headroom =
+                audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HEADROOM;
+            const bool tpdf =
+                audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_TPDF;
+            const bool iir =
+                audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR;
+            const bool hybrid =
+                audio.spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID;
+            drawText("S/PDIF MODE", 122,
+                     static_cast<int16_t>(378 - offset), 1, muted,
+                     contentDirty);
+            const int16_t modeY = static_cast<int16_t>(367 - offset);
+            fillRounded(220, modeY, 48, 29, 9,
+                        (repeat || exact || headroom || tpdf || iir || hybrid) ?
+                            track : rgb(40, 113, 132), contentDirty);
+            fillRounded(272, modeY, 48, 29, 9,
+                        repeat ? rgb(35, 125, 103) : track, contentDirty);
+            fillRounded(324, modeY, 48, 29, 9,
+                        exact ? rgb(92, 58, 123) : track, contentDirty);
+            fillRounded(376, modeY, 48, 29, 9,
+                        headroom ? rgb(160, 105, 38) : track, contentDirty);
+            fillRounded(428, modeY, 48, 29, 9,
+                        tpdf ? rgb(153, 62, 128) : track, contentDirty);
+            fillRounded(480, modeY, 48, 29, 9,
+                        iir ? rgb(46, 105, 154) : track, contentDirty);
+            fillRounded(532, modeY, 44, 29, 9,
+                        hybrid ? rgb(45, 126, 142) : track, contentDirty);
+            drawText("NATIVE", 226, static_cast<int16_t>(376 - offset), 1,
+                     (repeat || exact || headroom || tpdf || iir || hybrid) ?
+                         muted : white, contentDirty);
+            drawText("4X HOLD", 275, static_cast<int16_t>(376 - offset), 1,
+                     repeat ? white : muted, contentDirty);
+            drawText("4X EXACT", 324, static_cast<int16_t>(376 - offset), 1,
+                     exact ? white : muted, contentDirty);
+            drawText("4X -1DB", 379, static_cast<int16_t>(376 - offset), 1,
+                     headroom ? white : muted, contentDirty);
+            drawText("4X TPDF", 431, static_cast<int16_t>(376 - offset), 1,
+                     tpdf ? white : muted, contentDirty);
+            drawText("4X IIR", 486, static_cast<int16_t>(376 - offset), 1,
+                     iir ? white : muted, contentDirty);
+            drawText("HYBRID", 536, static_cast<int16_t>(376 - offset), 1,
+                     hybrid ? white : muted, contentDirty);
+        } else {
+            char gainText[5];
+            formatPercent(audio.volume, 100U, gainText);
+            drawText("HW GAIN", 122, static_cast<int16_t>(378 - offset), 1,
+                     muted, contentDirty);
+            fillRounded(220, static_cast<int16_t>(374 - offset), 390, 14, 7,
+                        track, contentDirty);
+            const int16_t gainWidth = static_cast<int16_t>(
+                (static_cast<uint32_t>(audio.volume) * 390U) / 100U);
+            if (gainWidth > 0) {
+                fillRounded(220, static_cast<int16_t>(374 - offset),
+                            gainWidth, 14, 7, cyan, contentDirty);
+            }
+            const int16_t knobX = static_cast<int16_t>(220 + gainWidth);
+            fillRounded(static_cast<int16_t>(knobX - 9),
+                        static_cast<int16_t>(371 - offset), 18, 20, 9,
+                        white, contentDirty);
+            drawText(gainText, 630, static_cast<int16_t>(372 - offset), 2,
+                     white, contentDirty);
         }
-        const int16_t gainKnobX = static_cast<int16_t>(220 + gainWidth);
-        fillRounded(static_cast<int16_t>(gainKnobX - 9), 342, 18, 20, 9,
-                    white, dirty);
-        drawText(gainText, 630, 343, 2, white, dirty);
-    }
 
-    const char* statusText = "DISABLED";
-    colortype statusColor = muted;
-    if (audio.requested != 0U || audio.status != USB_AUDIO_OFF) {
-        if (audio.status == USB_AUDIO_STARTING) {
-            statusText = spdifOutput ? "PREPARING S/PDIF OUTPUT" :
-                                      "PREPARING WM8994 LINE OUT";
+        const char* statusText = "DISABLED";
+        colortype statusColor = muted;
+        if (audio.requested != 0U || audio.status != USB_AUDIO_OFF) {
+            if (audio.status == USB_AUDIO_STARTING) {
+                statusText = spdifOutput ? "PREPARING S/PDIF OUTPUT" :
+                                          "PREPARING WM8994 LINE OUT";
+                statusColor = amber;
+            } else if (audio.status == USB_AUDIO_BUSY) {
+                statusText = "WAITING FOR MUSIC RECORDER OR SPECTRUM";
+                statusColor = amber;
+            } else if (audio.status == USB_AUDIO_ACTIVE &&
+                       audio.streaming != 0U) {
+                statusText = "PLAYING FROM COMPUTER";
+                statusColor = green;
+            } else if (audio.status == USB_AUDIO_ACTIVE &&
+                       audio.configured != 0U) {
+                statusText = "CONNECTED - WAITING FOR AUDIO";
+                statusColor = green;
+            } else if (audio.status == USB_AUDIO_ACTIVE) {
+                statusText = "CONNECT USB HS CABLE";
+                statusColor = cyan;
+            } else if (audio.status == USB_AUDIO_STOPPING) {
+                statusText = "STOPPING USB AUDIO";
+                statusColor = amber;
+            } else if (audio.status == USB_AUDIO_ERROR) {
+                statusText = "USB AUDIO ERROR - RETRY";
+                statusColor = red;
+            }
+        } else if (msc.active != 0U && msc.card_present == 0U) {
+            statusText = "USB ENABLED - INSERT SD CARD";
             statusColor = amber;
-        } else if (audio.status == USB_AUDIO_BUSY) {
-            statusText = "WAITING FOR MUSIC RECORDER OR SPECTRUM"; statusColor = amber;
-        } else if (audio.status == USB_AUDIO_ACTIVE && audio.streaming != 0U) {
-            statusText = "PLAYING FROM COMPUTER"; statusColor = green;
-        } else if (audio.status == USB_AUDIO_ACTIVE && audio.configured != 0U) {
-            statusText = "CONNECTED - WAITING FOR AUDIO"; statusColor = green;
-        } else if (audio.status == USB_AUDIO_ACTIVE) {
-            statusText = "CONNECT USB HS CABLE"; statusColor = cyan;
-        } else if (audio.status == USB_AUDIO_STOPPING) {
-            statusText = "STOPPING USB AUDIO"; statusColor = amber;
-        } else if (audio.status == USB_AUDIO_ERROR) {
-            statusText = "USB AUDIO ERROR - RETRY"; statusColor = red;
+        } else if (msc.status == USB_MSC_STARTING) {
+            statusText = "PREPARING SD CARD";
+            statusColor = amber;
+        } else if (msc.status == USB_MSC_ACTIVE && msc.configured != 0U) {
+            statusText = "SD READER CONNECTED";
+            statusColor = green;
+        } else if (msc.status == USB_MSC_ACTIVE) {
+            statusText = "CONNECT USB HS CABLE";
+            statusColor = cyan;
+        } else if (msc.status == USB_MSC_NO_CARD) {
+            statusText = "INSERT SD CARD";
+            statusColor = amber;
+        } else if (msc.status == USB_MSC_AUDIO_BUSY) {
+            statusText = "WAITING FOR MUSIC OR RECORDER";
+            statusColor = amber;
+        } else if (msc.status == USB_MSC_ERROR) {
+            statusText = "USB STORAGE ERROR - RETRY";
+            statusColor = red;
         }
-    } else if (msc.active != 0U && msc.card_present == 0U) {
-        statusText = "USB ENABLED - INSERT SD CARD"; statusColor = amber;
-    } else if (msc.status == USB_MSC_STARTING) {
-        statusText = "PREPARING SD CARD"; statusColor = amber;
-    } else if (msc.status == USB_MSC_ACTIVE && msc.configured != 0U) {
-        statusText = "SD READER CONNECTED"; statusColor = green;
-    } else if (msc.status == USB_MSC_ACTIVE) {
-        statusText = "CONNECT USB HS CABLE"; statusColor = cyan;
-    } else if (msc.status == USB_MSC_NO_CARD) {
-        statusText = "INSERT SD CARD"; statusColor = amber;
-    } else if (msc.status == USB_MSC_AUDIO_BUSY) {
-        statusText = "WAITING FOR MUSIC OR RECORDER"; statusColor = amber;
-    } else if (msc.status == USB_MSC_ERROR) {
-        statusText = "USB STORAGE ERROR - RETRY"; statusColor = red;
-    }
-    fillRounded(35, 383, 730, 34, 11, rgb(14, 23, 37), dirty);
-    fillRounded(55, 394, 12, 12, 6, statusColor, dirty);
-    drawText(statusText, 83, 390, 2, statusColor, dirty);
-    const bool configured = audio.configured != 0U || msc.configured != 0U;
-    const bool highSpeed = audio.configured != 0U ? audio.high_speed != 0U :
-                           msc.high_speed != 0U;
-    if (configured) {
-        drawText(highSpeed ? "HIGH SPEED" : "FULL SPEED",
-                 664, 395, 1, highSpeed ? green : amber, dirty);
+        fillRounded(55, static_cast<int16_t>(414 - offset), 690, 34, 11,
+                    rgb(14, 23, 37), contentDirty);
+        fillRounded(72, static_cast<int16_t>(425 - offset), 12, 12, 6,
+                    statusColor, contentDirty);
+        drawText(statusText, 98, static_cast<int16_t>(421 - offset), 2,
+                 statusColor, contentDirty);
+        const bool usbConfigured =
+            audio.configured != 0U || msc.configured != 0U;
+        const bool usbHighSpeed = audio.configured != 0U ?
+            audio.high_speed != 0U : msc.high_speed != 0U;
+        if (usbConfigured) {
+            drawText(usbHighSpeed ? "HIGH SPEED" : "FULL SPEED",
+                     646, static_cast<int16_t>(426 - offset), 1,
+                     usbHighSpeed ? green : amber, contentDirty);
+        }
+
+        char audioStats[58];
+        char xrunStats[24];
+        char* cursor;
+        if (audio.requested != 0U || audio.active != 0U) {
+            cursor = appendUnsigned(audioStats, audio.sample_rate);
+            if (spdifOutput &&
+                audio.spdif_mode != USB_AUDIO_SPDIF_NATIVE) {
+                cursor = appendText(cursor, ">");
+                cursor = appendUnsigned(cursor, audio.sample_rate * 4U);
+            }
+            cursor = appendText(cursor, " HZ / USB PACKETS ");
+            cursor = appendUnsigned(cursor, audio.received_packets);
+            *cursor = 0;
+            cursor = appendText(xrunStats, "XRUN U");
+            cursor = appendUnsigned(cursor, audio.underruns);
+            cursor = appendText(cursor, " / O");
+            cursor = appendUnsigned(cursor, audio.overruns);
+            *cursor = 0;
+        } else {
+            cursor = appendText(audioStats, "READ ");
+            cursor = appendUnsigned(cursor, msc.read_blocks);
+            cursor = appendText(cursor, " BLOCKS");
+            *cursor = 0;
+            cursor = appendText(xrunStats, "WRITE ");
+            cursor = appendUnsigned(cursor, msc.written_blocks);
+            cursor = appendText(cursor, " BLOCKS");
+            *cursor = 0;
+        }
+        drawText(audioStats, 58, static_cast<int16_t>(466 - offset), 1,
+                 white, contentDirty);
+        drawText(xrunStats, 570, static_cast<int16_t>(466 - offset), 1,
+                 (audio.underruns != 0U || audio.overruns != 0U) ?
+                     amber : white, contentDirty);
+
+        /* Start-buffer card. The setting is deliberately below the main USB
+           controls so it can use a wide, finger-friendly slider. */
+        fillRounded(35, static_cast<int16_t>(512 - offset), 730, 143, 17,
+                    surface, contentDirty);
+        fillRounded(53, static_cast<int16_t>(530 - offset), 52, 52, 13,
+                    rgb(38, 103, 91), contentDirty);
+        drawText("BF", 63, static_cast<int16_t>(547 - offset), 2, green,
+                 contentDirty);
+        drawText("USB START BUFFER", 122,
+                 static_cast<int16_t>(526 - offset), 2, white, contentDirty);
+        drawText("MORE FRAMES = MORE START LATENCY AND GAP HEADROOM", 122,
+                 static_cast<int16_t>(552 - offset), 1, muted, contentDirty);
+
+        char bufferValue[28];
+        cursor = appendUnsigned(bufferValue, audio.start_frames);
+        cursor = appendText(cursor, " FR / ");
+        const uint32_t latencyRate =
+            audio.sample_rate != 0U ? audio.sample_rate : 48000U;
+        cursor = appendUnsigned(cursor,
+            static_cast<uint32_t>(
+                (static_cast<uint64_t>(audio.start_frames) * 1000U) /
+                latencyRate));
+        cursor = appendText(cursor, " MS");
+        *cursor = 0;
+        drawText(bufferValue,
+                 static_cast<int16_t>(735 - textLength(bufferValue) * 6),
+                 static_cast<int16_t>(532 - offset), 1, green, contentDirty);
+
+        const int16_t sliderY = static_cast<int16_t>(585 - offset);
+        fillRounded(SETTINGS_BUFFER_SLIDER_X, sliderY,
+                    SETTINGS_BUFFER_SLIDER_WIDTH, 14, 7, track, contentDirty);
+        const int16_t knobX = settingsStartFramesToX(audio.start_frames);
+        const int16_t activeWidth =
+            static_cast<int16_t>(knobX - SETTINGS_BUFFER_SLIDER_X);
+        if (activeWidth > 0) {
+            fillRounded(SETTINGS_BUFFER_SLIDER_X, sliderY, activeWidth, 14, 7,
+                        green, contentDirty);
+        }
+        fillRounded(static_cast<int16_t>(knobX - 11),
+                    static_cast<int16_t>(sliderY - 5), 22, 24, 11, white,
+                    contentDirty);
+        drawText("6144", SETTINGS_BUFFER_SLIDER_X,
+                 static_cast<int16_t>(608 - offset), 1, muted, contentDirty);
+        drawText("30720",
+                 static_cast<int16_t>(SETTINGS_BUFFER_SLIDER_X +
+                                      SETTINGS_BUFFER_SLIDER_WIDTH - 36),
+                 static_cast<int16_t>(608 - offset), 1, muted, contentDirty);
+        drawText(audio.streaming != 0U ?
+                 "SAVED - APPLIES AT NEXT START OR REBUFFER" :
+                 "ACTIVE FOR THE NEXT DMA START",
+                 220, static_cast<int16_t>(633 - offset), 1,
+                 audio.streaming != 0U ? amber : green, contentDirty);
     }
 
-    fillRounded(35, 423, 730, 24, 9, surface, dirty);
-    char leftText[48];
-    char rightText[28];
-    char* cursor;
-    if (audio.requested != 0U || audio.active != 0U) {
-        cursor = appendUnsigned(leftText, audio.sample_rate);
-        if (audio.output == USB_AUDIO_OUTPUT_SPDIF &&
-            audio.spdif_mode != USB_AUDIO_SPDIF_NATIVE) {
-            cursor = appendText(cursor, ">");
-            cursor = appendUnsigned(cursor, audio.sample_rate * 4U);
-        }
-        cursor = appendText(cursor, " HZ / USB PACKETS ");
-        cursor = appendUnsigned(cursor, audio.received_packets); *cursor = 0;
-        cursor = appendText(rightText, "XRUN U");
-        cursor = appendUnsigned(cursor, audio.underruns);
-        cursor = appendText(cursor, " / O");
-        cursor = appendUnsigned(cursor, audio.overruns); *cursor = 0;
-    } else {
-        cursor = appendText(leftText, "READ ");
-        cursor = appendUnsigned(cursor, msc.read_blocks);
-        cursor = appendText(cursor, " BLOCKS"); *cursor = 0;
-        cursor = appendText(rightText, "WRITE ");
-        cursor = appendUnsigned(cursor, msc.written_blocks);
-        cursor = appendText(cursor, " BLOCKS"); *cursor = 0;
-    }
-    drawText(leftText, 55, 431, 1, white, dirty);
-    drawText(rightText, 450, 431, 1,
-             (audio.underruns != 0U || audio.overruns != 0U) ? amber : white,
-             dirty);
+    /* Fixed scroll affordance remains visible while the content moves. */
+    drawText("SCROLL", 660, 94, 1, muted, dirty);
+    fillRounded(778, 118, 5, 322, 2, rgb(43, 57, 78), dirty);
+    const int16_t thumbHeight = 204;
+    const int16_t thumbTravel = static_cast<int16_t>(322 - thumbHeight);
+    const int16_t thumbY = static_cast<int16_t>(118 +
+        (static_cast<int32_t>(settingsScroll) * thumbTravel) /
+        SETTINGS_SCROLL_MAX);
+    fillRounded(778, thumbY, 5, thumbHeight, 2, cyan, dirty);
 }
 
 void AppPanelWidget::drawCalculator(const Rect& dirty) const
@@ -2219,6 +2412,7 @@ MainView::MainView()
       stopwatchLapScroll(0), stopwatchLapScrollStart(0),
       fileScroll(0), fileScrollStart(0),
       musicScroll(0), musicScrollStart(0), musicWavCount(0), musicDetail(false),
+      settingsScroll(0), settingsScrollStart(0),
       lastStopwatchRenderSlot(0xFFFFFFFFUL),
       lastStopwatchControlGeneration(0xFFFFFFFFUL),
       lastStorageGeneration(0xFFFFFFFFUL),
@@ -2408,6 +2602,7 @@ void MainView::handleTrackingClick(const ClickEvent& event)
         stopwatchLapScrollStart = stopwatchLapScroll;
         fileScrollStart = fileScroll;
         musicScrollStart = musicScroll;
+        settingsScrollStart = settingsScroll;
         animating = false;
         if (appVisible && selectedApp == 6U) {
             appPanel.setCalculatorPressedKey(calculatorKeyAt(x, y));
@@ -2468,12 +2663,22 @@ void MainView::handleTrackingClick(const ClickEvent& event)
             return;
         }
 
-        if (selectedApp == 11U && pressY >= 338 && pressY <= 367) {
+        if (selectedApp == 11U &&
+            pressY >= SETTINGS_VIEW_TOP &&
+            pressY <= SETTINGS_VIEW_BOTTOM) {
             USB_AudioSnapshot audio;
             USB_Audio_GetSnapshot(&audio);
-            if (audio.output == USB_AUDIO_OUTPUT_WM8994) {
+            const int16_t contentPressY =
+                static_cast<int16_t>(pressY + settingsScrollStart);
+            if (contentPressY >= 360 && contentPressY <= 402 &&
+                audio.output == USB_AUDIO_OUTPUT_WM8994) {
                 USB_Audio_RequestVolume(settingsGainFromX(x));
                 appPanel.invalidateSettingsGain();
+                return;
+            }
+            if (contentPressY >= 570 && contentPressY <= 618) {
+                USB_Audio_RequestStartFrames(settingsStartFramesFromX(x));
+                appPanel.invalidateSettingsStartBuffer();
                 return;
             }
         }
@@ -2539,22 +2744,29 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                 appPanel.invalidateSpectrum();
             }
         } else if (selectedApp == 11U) {
-            if (pressX >= 620 && pressX <= 755 && x >= 620 && x <= 755 &&
-                pressY >= 118 && pressY <= 209 && y >= 118 && y <= 209) {
+            const int16_t contentPressY =
+                static_cast<int16_t>(pressY + settingsScroll);
+            const int16_t contentReleaseY =
+                static_cast<int16_t>(y + settingsScroll);
+            if (pressX >= 620 && pressX <= 755 &&
+                x >= 620 && x <= 755 &&
+                contentPressY >= 118 && contentPressY <= 209 &&
+                contentReleaseY >= 118 && contentReleaseY <= 209) {
                 USB_MSC_Snapshot msc;
                 USB_MSC_GetSnapshot(&msc);
                 USB_MSC_RequestEnable(msc.requested == 0U ? 1U : 0U);
                 appPanel.invalidateSettings();
             } else if (pressX >= 620 && pressX <= 755 &&
                        x >= 620 && x <= 755 &&
-                       pressY >= 219 && pressY <= 294 &&
-                       y >= 219 && y <= 294) {
+                       contentPressY >= 220 && contentPressY <= 282 &&
+                       contentReleaseY >= 220 && contentReleaseY <= 282) {
                 USB_AudioSnapshot audio;
                 USB_Audio_GetSnapshot(&audio);
                 USB_Audio_RequestEnable(audio.requested == 0U ? 1U : 0U);
                 appPanel.invalidateSettings();
-            } else if (pressY >= 272 && pressY <= 304 &&
-                       y >= 272 && y <= 304) {
+            } else if (contentPressY >= 286 && contentPressY <= 322 &&
+                       contentReleaseY >= 286 &&
+                       contentReleaseY <= 322) {
                 if (pressX >= 210 && pressX <= 398 &&
                     x >= 210 && x <= 398) {
                     USB_Audio_RequestHostMode(USB_AUDIO_HOST_LINUX);
@@ -2564,8 +2776,9 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                     USB_Audio_RequestHostMode(USB_AUDIO_HOST_WINDOWS);
                     appPanel.invalidateSettings();
                 }
-            } else if (pressY >= 305 && pressY <= 337 &&
-                       y >= 305 && y <= 337) {
+            } else if (contentPressY >= 324 && contentPressY <= 360 &&
+                       contentReleaseY >= 324 &&
+                       contentReleaseY <= 360) {
                 if (pressX >= 210 && pressX <= 398 &&
                     x >= 210 && x <= 398) {
                     USB_Audio_RequestOutput(USB_AUDIO_OUTPUT_WM8994);
@@ -2575,8 +2788,9 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                     USB_Audio_RequestOutput(USB_AUDIO_OUTPUT_SPDIF);
                     appPanel.invalidateSettings();
                 }
-            } else if (pressY >= 338 && pressY <= 369 &&
-                       y >= 338 && y <= 369) {
+            } else if (contentPressY >= 364 && contentPressY <= 400 &&
+                       contentReleaseY >= 364 &&
+                       contentReleaseY <= 400) {
                 if (pressX >= 210 && pressX <= 270 &&
                     x >= 210 && x <= 270) {
                     USB_Audio_RequestSpdifMode(USB_AUDIO_SPDIF_NATIVE);
@@ -2677,17 +2891,53 @@ void MainView::handleTrackingDrag(const DragEvent& event)
             appPanel.setCalculatorPressedKey(
                 calculatorKeyAt(event.getNewX(), event.getNewY()));
             return;
-        } else if (selectedApp == 11U && pressY >= 338 && pressY <= 367) {
-            USB_AudioSnapshot audio;
-            USB_Audio_GetSnapshot(&audio);
-            if (audio.output == USB_AUDIO_OUTPUT_SPDIF) return;
+        } else if (selectedApp == 11U) {
             const int16_t deltaX = static_cast<int16_t>(event.getNewX() - pressX);
             const int16_t deltaY = static_cast<int16_t>(event.getNewY() - pressY);
-            if (deltaX <= -5 || deltaX >= 5 || deltaY <= -8 || deltaY >= 8) {
-                dragging = true;
+            const int16_t contentPressY =
+                static_cast<int16_t>(pressY + settingsScrollStart);
+            if (pressY >= SETTINGS_VIEW_TOP &&
+                pressY <= SETTINGS_VIEW_BOTTOM &&
+                contentPressY >= 360 && contentPressY <= 402) {
+                USB_AudioSnapshot audio;
+                USB_Audio_GetSnapshot(&audio);
+                if (audio.output == USB_AUDIO_OUTPUT_WM8994) {
+                    if (deltaX <= -5 || deltaX >= 5 ||
+                        deltaY <= -8 || deltaY >= 8) {
+                        dragging = true;
+                    }
+                    USB_Audio_RequestVolume(
+                        settingsGainFromX(event.getNewX()));
+                    appPanel.invalidateSettingsGain();
+                }
+                return;
             }
-            USB_Audio_RequestVolume(settingsGainFromX(event.getNewX()));
-            appPanel.invalidateSettingsGain();
+            if (pressY >= SETTINGS_VIEW_TOP &&
+                pressY <= SETTINGS_VIEW_BOTTOM &&
+                contentPressY >= 570 && contentPressY <= 618) {
+                if (deltaX <= -5 || deltaX >= 5 ||
+                    deltaY <= -8 || deltaY >= 8) {
+                    dragging = true;
+                }
+                USB_Audio_RequestStartFrames(
+                    settingsStartFramesFromX(event.getNewX()));
+                appPanel.invalidateSettingsStartBuffer();
+                return;
+            }
+            if (pressY >= SETTINGS_VIEW_TOP &&
+                pressY <= SETTINGS_VIEW_BOTTOM) {
+                if (deltaY <= -8 || deltaY >= 8) dragging = true;
+                if (dragging) {
+                    int16_t next =
+                        static_cast<int16_t>(settingsScrollStart - deltaY);
+                    if (next < 0) next = 0;
+                    if (next > SETTINGS_SCROLL_MAX) next = SETTINGS_SCROLL_MAX;
+                    if (settingsScroll != next) {
+                        settingsScroll = next;
+                        appPanel.setSettingsScroll(settingsScroll);
+                    }
+                }
+            }
             return;
         } else if (selectedApp == 2U && pressY >= 205) {
             const int16_t delta = static_cast<int16_t>(event.getNewY() - pressY);
@@ -2794,6 +3044,9 @@ void MainView::openApp(uint8_t app)
         lastSpectrumRenderSlot = 0xFFFFFFFFUL;
         AudioSpectrum_RequestStart();
     } else if (app == 11U) {
+        settingsScroll = 0;
+        settingsScrollStart = 0;
+        appPanel.setSettingsScroll(0);
         lastUsbMscGeneration = 0xFFFFFFFFUL;
         lastUsbAudioGeneration = 0xFFFFFFFFUL;
     } else if (app == 13U) {

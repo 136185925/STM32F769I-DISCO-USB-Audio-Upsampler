@@ -23,13 +23,11 @@
 #define USB_AUDIO_INPUT_RING_MASK      (USB_AUDIO_INPUT_RING_FRAMES - 1U)
 #define USB_AUDIO_DMA_FRAMES           4096U
 #define USB_AUDIO_DMA_HALF_FRAMES      (USB_AUDIO_DMA_FRAMES / 2U)
-#define USB_AUDIO_START_FRAMES         8192U
 /* Keep a complete start-watermark in the elastic ring during steady state.
  * After the initial DMA fill the queue begins near 4096 frames, then explicit
  * feedback raises it to this target. The extra guard absorbs the 60-70 ms
  * isochronous OUT gaps observed when both Windows and iPad repeat SET_CUR for
  * the already active sample rate, without increasing initial playback delay. */
-#define USB_AUDIO_FEEDBACK_TARGET_FRAMES USB_AUDIO_START_FRAMES
 #define USB_AUDIO_FEEDBACK_FILTER_SHIFT 6U
 #define USB_AUDIO_FEEDBACK_P_Q16        1024LL
 #define USB_AUDIO_FEEDBACK_MAX_PPM      5000LL
@@ -48,16 +46,22 @@
 #define USB_AUDIO_HOST_BKP_MASK        0xFFFFFF00UL
 #define USB_AUDIO_SPDIF_BKP_MAGIC      0x53504400UL
 #define USB_AUDIO_SPDIF_BKP_MASK       0xFFFFFF00UL
+#define USB_AUDIO_BUFFER_BKP_MAGIC     0x55420000UL
+#define USB_AUDIO_BUFFER_BKP_MASK      0xFFFF0000UL
 #define USB_AUDIO_SPDIF_FACTOR         SPDIF_UPSAMPLER_FACTOR
 
-#if USB_AUDIO_START_FRAMES >= USB_AUDIO_INPUT_RING_FRAMES
-#error "USB audio start threshold must be smaller than the input ring"
+#if USB_AUDIO_START_FRAMES_MAX >= USB_AUDIO_INPUT_RING_FRAMES
+#error "Maximum USB audio start threshold must be smaller than the input ring"
 #endif
 #if (USB_AUDIO_INPUT_RING_FRAMES & USB_AUDIO_INPUT_RING_MASK) != 0U
 #error "USB audio input ring capacity must be a power of two"
 #endif
-#if USB_AUDIO_START_FRAMES < USB_AUDIO_DMA_FRAMES
-#error "USB audio start threshold must cover the complete DMA buffer"
+#if USB_AUDIO_START_FRAMES_MIN < USB_AUDIO_DMA_FRAMES
+#error "Minimum USB audio start threshold must cover the complete DMA buffer"
+#endif
+#if ((USB_AUDIO_START_FRAMES_MAX - USB_AUDIO_START_FRAMES_MIN) % \
+     USB_AUDIO_START_FRAMES_STEP) != 0U
+#error "USB audio start threshold range must contain complete slider steps"
 #endif
 #if (USB_AUDIO_DMA_HALF_FRAMES % USB_AUDIO_SPDIF_FACTOR) != 0U
 #error "S/PDIF DMA half-buffer must contain complete 4x interpolation groups"
@@ -112,17 +116,43 @@ static volatile USB_AudioOutput usb_audio_output = USB_AUDIO_OUTPUT_WM8994;
 static volatile USB_AudioHostMode usb_audio_host_mode = USB_AUDIO_HOST_LINUX;
 static volatile USB_AudioSpdifMode usb_audio_spdif_mode =
     USB_AUDIO_SPDIF_NATIVE;
+static volatile uint32_t usb_audio_start_frames =
+    USB_AUDIO_START_FRAMES_DEFAULT;
+static volatile uint32_t usb_audio_active_start_frames =
+    USB_AUDIO_START_FRAMES_DEFAULT;
 static USB_AudioOutput usb_audio_prepared_output = USB_AUDIO_OUTPUT_WM8994;
 static USB_AudioSpdifMode usb_audio_prepared_spdif_mode =
     USB_AUDIO_SPDIF_NATIVE;
 static TickType_t usb_audio_last_stats_publish_tick;
 static volatile int32_t usb_audio_feedback_integral_q16;
 static volatile int32_t usb_audio_feedback_filtered_queue_q8 =
-    (int32_t)(USB_AUDIO_FEEDBACK_TARGET_FRAMES << 8U);
+    (int32_t)(USB_AUDIO_START_FRAMES_DEFAULT << 8U);
 static uint32_t usb_audio_spdif_status_frame;
 static SPDIF_Upsampler4x usb_audio_spdif_upsampler;
 static SPDIF_IirUpsampler4x usb_audio_spdif_iir_upsampler;
 static SPDIF_HybridUpsampler4x usb_audio_spdif_hybrid_upsampler;
+
+static uint32_t USB_Audio_NormalizeStartFrames(uint32_t frames)
+{
+  if (frames < USB_AUDIO_START_FRAMES_MIN)
+    frames = USB_AUDIO_START_FRAMES_MIN;
+  if (frames > USB_AUDIO_START_FRAMES_MAX)
+    frames = USB_AUDIO_START_FRAMES_MAX;
+  frames = USB_AUDIO_START_FRAMES_MIN +
+      (((frames - USB_AUDIO_START_FRAMES_MIN) +
+        USB_AUDIO_START_FRAMES_STEP / 2U) /
+       USB_AUDIO_START_FRAMES_STEP) * USB_AUDIO_START_FRAMES_STEP;
+  return frames;
+}
+
+static uint32_t USB_Audio_FeedbackTargetFrames(void)
+{
+  uint32_t target = usb_audio_active_start_frames;
+  const uint32_t maximum =
+      USB_AUDIO_INPUT_RING_FRAMES - USB_AUDIO_DMA_FRAMES;
+  if (target > maximum) target = maximum;
+  return target;
+}
 
 static void USB_Audio_Publish(void)
 {
@@ -141,6 +171,7 @@ static void USB_Audio_Publish(void)
        (usb_audio_snapshot.output != usb_audio_output) ||
        (usb_audio_snapshot.host_mode != usb_audio_host_mode) ||
        (usb_audio_snapshot.spdif_mode != usb_audio_spdif_mode) ||
+       (usb_audio_snapshot.start_frames != usb_audio_start_frames) ||
        (usb_audio_snapshot.sample_rate != usb_audio_current_rate)) ? 1U : 0U;
   const uint8_t xrun_changed =
       ((usb_audio_snapshot.underruns != usb_audio_underruns) ||
@@ -165,6 +196,7 @@ static void USB_Audio_Publish(void)
   usb_audio_snapshot.output = usb_audio_output;
   usb_audio_snapshot.host_mode = usb_audio_host_mode;
   usb_audio_snapshot.spdif_mode = usb_audio_spdif_mode;
+  usb_audio_snapshot.start_frames = usb_audio_start_frames;
   usb_audio_snapshot.sample_rate = usb_audio_current_rate;
   usb_audio_snapshot.received_bytes = usb_audio_received_bytes;
   usb_audio_snapshot.received_packets = usb_audio_received_packets;
@@ -182,6 +214,7 @@ void USB_Audio_CreateResources(void)
 {
   const uint32_t saved_host = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1);
   const uint32_t saved_spdif = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR2);
+  const uint32_t saved_buffer = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR3);
 
   memset(&usb_audio_snapshot, 0, sizeof(usb_audio_snapshot));
   usb_audio_snapshot.status = USB_AUDIO_OFF;
@@ -219,8 +252,20 @@ void USB_Audio_CreateResources(void)
   {
     usb_audio_spdif_mode = USB_AUDIO_SPDIF_NATIVE;
   }
+  if ((saved_buffer & USB_AUDIO_BUFFER_BKP_MASK) ==
+      USB_AUDIO_BUFFER_BKP_MAGIC)
+  {
+    usb_audio_start_frames = USB_Audio_NormalizeStartFrames(
+        saved_buffer & 0xFFFFU);
+  }
+  else
+  {
+    usb_audio_start_frames = USB_AUDIO_START_FRAMES_DEFAULT;
+  }
+  usb_audio_active_start_frames = usb_audio_start_frames;
   usb_audio_snapshot.host_mode = usb_audio_host_mode;
   usb_audio_snapshot.spdif_mode = usb_audio_spdif_mode;
+  usb_audio_snapshot.start_frames = usb_audio_start_frames;
   usb_audio_prepared_output = USB_AUDIO_OUTPUT_WM8994;
   usb_audio_prepared_spdif_mode = usb_audio_spdif_mode;
   usb_audio_last_stats_publish_tick = 0U;
@@ -337,6 +382,38 @@ USB_AudioSpdifMode USB_Audio_GetSpdifMode(void)
   return usb_audio_spdif_mode;
 }
 
+void USB_Audio_RequestStartFrames(uint32_t frames)
+{
+  const uint32_t requested = USB_Audio_NormalizeStartFrames(frames);
+  if (requested == usb_audio_start_frames) return;
+
+  usb_audio_start_frames = requested;
+  HAL_PWR_EnableBkUpAccess();
+  HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR3,
+                      USB_AUDIO_BUFFER_BKP_MAGIC | requested);
+
+  /* Do not move the asynchronous feedback target under an active stream.
+   * The selection becomes active immediately while idle, or at the next
+   * stream reset/rebuffer boundary while playing. */
+  if (usb_audio_dma_running == 0U)
+  {
+    usb_audio_active_start_frames = requested;
+    usb_audio_feedback_integral_q16 = 0;
+    usb_audio_feedback_filtered_queue_q8 =
+        (int32_t)(USB_Audio_FeedbackTargetFrames() << 8U);
+  }
+  if (usb_audio_task_handle != NULL)
+  {
+    (void)xTaskNotify(usb_audio_task_handle, USB_AUDIO_NOTIFY_DATA, eSetBits);
+  }
+  USB_Audio_Publish();
+}
+
+uint32_t USB_Audio_GetStartFrames(void)
+{
+  return usb_audio_start_frames;
+}
+
 uint8_t USB_Audio_EnableRequested(void)
 {
   return usb_audio_requested;
@@ -369,9 +446,10 @@ static void USB_Audio_ResetStream(void)
   usb_audio_read_frame = 0U;
   usb_audio_dma_running = 0U;
   usb_audio_rebuffer_requested = 0U;
+  usb_audio_active_start_frames = usb_audio_start_frames;
   usb_audio_feedback_integral_q16 = 0;
   usb_audio_feedback_filtered_queue_q8 =
-      (int32_t)(USB_AUDIO_FEEDBACK_TARGET_FRAMES << 8U);
+      (int32_t)(USB_Audio_FeedbackTargetFrames() << 8U);
   usb_audio_spdif_status_frame = 0U;
   SPDIF_Upsampler4x_Reset(&usb_audio_spdif_upsampler);
   SPDIF_IirUpsampler4x_Reset(&usb_audio_spdif_iir_upsampler);
@@ -678,9 +756,10 @@ static uint8_t USB_Audio_StopForRebuffer(void)
   {
     usb_audio_dma_running = 0U;
     usb_audio_rebuffer_requested = 0U;
+    usb_audio_active_start_frames = usb_audio_start_frames;
     usb_audio_feedback_integral_q16 = 0;
     usb_audio_feedback_filtered_queue_q8 =
-        (int32_t)(USB_AUDIO_FEEDBACK_TARGET_FRAMES << 8U);
+        (int32_t)(USB_Audio_FeedbackTargetFrames() << 8U);
   }
   return stopped;
 }
@@ -718,10 +797,11 @@ static void USB_Audio_ReceivePacket(const uint8_t *data, uint32_t size)
   /* Packet callbacks run every USB microframe. Wake the high-priority audio
      task only once when the initial prebuffer crosses its start watermark;
      SAI DMA half/full callbacks drive all steady-state refills. */
+  const uint32_t start_frames = usb_audio_active_start_frames;
   if ((usb_audio_task_handle != NULL) &&
       (usb_audio_dma_running == 0U) &&
-      (queued_before < USB_AUDIO_START_FRAMES) &&
-      ((queued_before + accepted) >= USB_AUDIO_START_FRAMES))
+      (queued_before < start_frames) &&
+      ((queued_before + accepted) >= start_frames))
   {
     BaseType_t wake = pdFALSE;
     (void)xTaskNotifyFromISR(usb_audio_task_handle, USB_AUDIO_NOTIFY_DATA,
@@ -859,7 +939,7 @@ void USB_Audio_Task(void const *argument)
       }
       if ((usb_audio_dma_running == 0U) &&
           ((usb_audio_write_frame - usb_audio_read_frame) >=
-           USB_AUDIO_START_FRAMES))
+           usb_audio_active_start_frames))
       {
         (void)USB_Audio_FillDmaHalf(0U);
         (void)USB_Audio_FillDmaHalf(1U);
@@ -912,7 +992,7 @@ void USB_Audio_Task(void const *argument)
         if (missing != 0U)
         {
           /* Do not keep consuming one USB packet ahead forever after a track
-             gap. Stop at this DMA boundary and restore the 8192-frame start
+             gap. Stop at this DMA boundary and restore the selected start
              waterline before playing again. */
           usb_audio_rebuffer_requested = 1U;
           (void)USB_Audio_StopForRebuffer();
@@ -1025,7 +1105,7 @@ static uint32_t USB_Audio_InterfaceGetFeedback(void)
   {
     usb_audio_feedback_integral_q16 = 0;
     usb_audio_feedback_filtered_queue_q8 =
-        (int32_t)(USB_AUDIO_FEEDBACK_TARGET_FRAMES << 8U);
+        (int32_t)(USB_Audio_FeedbackTargetFrames() << 8U);
     return nominal_q16;
   }
 
@@ -1043,7 +1123,7 @@ static uint32_t USB_Audio_InterfaceGetFeedback(void)
   filtered_q8 += (queue_q8 - filtered_q8) >>
                  USB_AUDIO_FEEDBACK_FILTER_SHIFT;
   usb_audio_feedback_filtered_queue_q8 = filtered_q8;
-  error_frames = (int32_t)USB_AUDIO_FEEDBACK_TARGET_FRAMES -
+  error_frames = (int32_t)USB_Audio_FeedbackTargetFrames() -
                  (filtered_q8 >> 8U);
 
   integral_limit_q16 =

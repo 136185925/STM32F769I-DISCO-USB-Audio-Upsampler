@@ -9,6 +9,10 @@ extern "C" {
 
 #define USB_AUDIO_INPUT_RING_FRAMES  32768U
 #define USB_AUDIO_INPUT_RING_BYTES   (USB_AUDIO_INPUT_RING_FRAMES * 4U)
+#define USB_AUDIO_START_FRAMES_MIN   6144U
+#define USB_AUDIO_START_FRAMES_MAX   30720U
+#define USB_AUDIO_START_FRAMES_STEP  1024U
+#define USB_AUDIO_START_FRAMES_DEFAULT 8192U
 
 typedef enum
 {
@@ -52,6 +56,7 @@ typedef struct
   uint32_t underruns;
   uint32_t overruns;
   uint32_t sample_rate;
+  uint32_t start_frames;
   uint8_t requested;
   uint8_t active;
   uint8_t configured;
@@ -74,6 +79,8 @@ void USB_Audio_RequestHostMode(USB_AudioHostMode mode);
 USB_AudioHostMode USB_Audio_GetHostMode(void);
 void USB_Audio_RequestSpdifMode(USB_AudioSpdifMode mode);
 USB_AudioSpdifMode USB_Audio_GetSpdifMode(void);
+void USB_Audio_RequestStartFrames(uint32_t frames);
+uint32_t USB_Audio_GetStartFrames(void);
 void USB_Audio_GetSnapshot(USB_AudioSnapshot *snapshot);
 uint8_t USB_Audio_IsActive(void);
 uint8_t USB_Audio_ClaimsCodec(void);
