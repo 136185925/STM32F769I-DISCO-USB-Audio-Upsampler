@@ -119,18 +119,18 @@ At the end of the WAV, zero values continue to be fed in, allowing the IIR recur
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline, the filtering algorithm will not change the S/PDIF clock edges.
 Insufficient performance may cause:
-### DMA underrun
-  Repetition of the old buffer
-  PCM timeline jumps
-  Pops or stuttering
-  These are XRUNs or data discontinuities, not continuous clock jitter.
+#### DMA underrun
+#### Repetition of the old buffer
+#### PCM timeline jumps
+#### Pops or stuttering
+#### These are XRUNs or data discontinuities, not continuous clock jitter.
 The current S/PDIF DMA configuration is:
-  Circular DMA
-  Very High DMA Priority
-  FIFO Enabled
-  Full FIFO Threshold
-  INCR4 Memory Burst
-  Independent PLLI2S clock
+#### Circular DMA
+#### Very High DMA Priority
+#### FIFO Enabled
+#### Full FIFO Threshold
+#### INCR4 Memory Burst
+#### Independent PLLI2S clock
 
 ## Recommended choice
   Lowest CPU usage: NATIVE
