@@ -1,0 +1,3 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/ltdc.c:32:6:MX_LTDC_Init	64	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/ltdc.c:96:6:HAL_LTDC_MspInit	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/ltdc.c:116:6:HAL_LTDC_MspDeInit	16	static

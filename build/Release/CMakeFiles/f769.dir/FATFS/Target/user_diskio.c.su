@@ -1,0 +1,15 @@
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:70:13:USER_dma_signal_from_isr	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:314:9:USER_status	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:237:26:USER_wait_ready	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:431:9:USER_ioctl	48	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:284:9:USER_initialize	8	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:116:13:USER_dma_create_resources.part.0	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:124:26:USER_dma_wait	8	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:387:9:USER_write	48	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:343:9:USER_read	56	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:92:6:HAL_SD_TxCpltCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:84:6:HAL_SD_RxCpltCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:100:6:HAL_SD_ErrorCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:108:6:HAL_SD_AbortCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:224:6:USER_SD_NotifyRemoved	0	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/Target/user_diskio.c:230:6:USER_SD_NotifyInserted	0	static,ignoring_inline_asm

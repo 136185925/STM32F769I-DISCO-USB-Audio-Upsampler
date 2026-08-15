@@ -1,0 +1,269 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "cmake/stm32cubemx/CMakeFiles/FatFs.dir/./__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj"
+		},
+		{
+			"path" : "cmake/stm32cubemx/CMakeFiles/FatFs.dir/./__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj"
+		},
+		{
+			"path" : "cmake/stm32cubemx/CMakeFiles/FatFs.dir/./__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj"
+		},
+		{
+			"path" : "cmake/stm32cubemx/CMakeFiles/FatFs.dir/./__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"cmake/stm32cubemx/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 206,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 208,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 207,
+				"parent" : 0
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"compileDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "stm32cubemx::@768a070a0fe75716b479"
+		}
+	],
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections -fstack-usage -Os -g0 -std=gnu11"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "STM32F769xx"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "USE_HAL_DRIVER"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Core/Inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../FATFS/Target"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../FATFS/App"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../USB_DEVICE/App"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../USB_DEVICE/Target"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../TouchGFX/App"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../TouchGFX/target/generated"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../TouchGFX/target"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/STM32F7xx_HAL_Driver/Inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/BSP/Components/otm8009a"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/BSP/STM32F769I-Discovery"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/BSP/Components/Common"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/BSP/Components/wm8994"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/Third_Party/FatFs/src"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Middlewares/ST/STM32_USB_Device_Library/Class/AUDIO/Inc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32F7xx/Include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/Gary/Desktop/f769/f769/cmake/stm32cubemx/../../Drivers/CMSIS/Include"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3
+			]
+		}
+	],
+	"id" : "FatFs::@768a070a0fe75716b479",
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "stm32cubemx::@768a070a0fe75716b479"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "stm32cubemx::@768a070a0fe75716b479"
+		}
+	],
+	"linkLibraries" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "stm32cubemx::@768a070a0fe75716b479"
+		}
+	],
+	"name" : "FatFs",
+	"paths" : 
+	{
+		"build" : "cmake/stm32cubemx",
+		"source" : "cmake/stm32cubemx"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "Middlewares/Third_Party/FatFs/src/diskio.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "Middlewares/Third_Party/FatFs/src/ff.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "Middlewares/Third_Party/FatFs/src/ff_gen_drv.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "Middlewares/Third_Party/FatFs/src/option/syscall.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "OBJECT_LIBRARY"
+}

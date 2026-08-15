@@ -1,0 +1,7 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:47:17:AudioDiag_EnterCritical	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:55:13:AudioDiag_ExitCritical	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:64:20:AudioDiag_EventName	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:90:20:AudioDiag_OutputName	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:95:6:AudioDiag_Log	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:142:16:AudioDiag_Write	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:153:9:AudioDiag_Service	232	static

@@ -1,0 +1,5 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/freertos.c:90:13:vApplicationIdleHook	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/freertos.c:105:13:vApplicationStackOverflowHook	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/freertos.c:114:13:vApplicationMallocFailedHook	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/freertos.c:133:6:vApplicationGetIdleTaskMemory	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/freertos.c:147:6:MX_FREERTOS_Init	272	static

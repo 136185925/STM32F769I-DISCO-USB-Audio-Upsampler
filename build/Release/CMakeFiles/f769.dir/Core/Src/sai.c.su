@@ -1,0 +1,4 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sai.c:33:6:MX_SAI1_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sai.c:108:6:MX_SAI2_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sai.c:140:6:HAL_SAI_MspInit	56	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sai.c:218:6:HAL_SAI_MspDeInit	8	static

@@ -1,0 +1,172 @@
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:91:5:touchgfx::colortype::colortype(uint32_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:114:5:touchgfx::colortype::operator uint32_t() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:127:5:touchgfx::Rect::Rect()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:140:5:touchgfx::Rect::Rect(int16_t, int16_t, int16_t, int16_t)	24	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:192:10:bool touchgfx::Rect::intersect(const touchgfx::Rect&) const	32	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/Types.hpp:230:10:void touchgfx::Rect::operator&=(const touchgfx::Rect&)	56	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/events/ClickEvent.hpp:73:13:int16_t touchgfx::ClickEvent::getX() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/events/ClickEvent.hpp:83:13:int16_t touchgfx::ClickEvent::getY() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/events/ClickEvent.hpp:123:20:touchgfx::ClickEvent::ClickEventType touchgfx::ClickEvent::getType() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/events/DragEvent.hpp:92:13:int16_t touchgfx::DragEvent::getNewX() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/events/DragEvent.hpp:102:13:int16_t touchgfx::DragEvent::getNewY() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:48:5:touchgfx::Drawable::Drawable()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:62:13:touchgfx::Drawable::~Drawable()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:62:13:virtual touchgfx::Drawable::~Drawable()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:121:18:virtual void touchgfx::Drawable::invalidateContent() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:147:23:virtual touchgfx::Drawable* touchgfx::Drawable::getFirstChild()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:233:10:void touchgfx::Drawable::setPosition(int16_t, int16_t, int16_t, int16_t)	24	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:315:18:virtual void touchgfx::Drawable::setX(int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:327:18:virtual void touchgfx::Drawable::setY(int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:343:10:void touchgfx::Drawable::setXY(int16_t, int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:356:18:virtual void touchgfx::Drawable::setWidth(int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:368:18:virtual void touchgfx::Drawable::setHeight(int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:378:18:virtual void touchgfx::Drawable::childGeometryChanged()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:389:18:virtual void touchgfx::Drawable::handleClickEvent(const touchgfx::ClickEvent&)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:401:18:virtual void touchgfx::Drawable::handleGestureEvent(const touchgfx::GestureEvent&)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:413:10:void touchgfx::Drawable::setWidthHeight(int16_t, int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:490:18:virtual void touchgfx::Drawable::handleDragEvent(const touchgfx::DragEvent&)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:501:18:virtual void touchgfx::Drawable::handleTickEvent()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:515:10:void touchgfx::Drawable::setVisible(bool)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:525:10:void touchgfx::Drawable::setTouchable(bool)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:537:10:bool touchgfx::Drawable::isVisible() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:549:10:bool touchgfx::Drawable::isTouchable() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:588:18:virtual void touchgfx::Drawable::moveTo(int16_t, int16_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:625:10:void touchgfx::Drawable::resetDrawChainCache()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:703:18:virtual void touchgfx::Drawable::setupDrawChain(const touchgfx::Rect&, touchgfx::Drawable**)	24	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/Widget.hpp:45:18:virtual void touchgfx::Widget::getLastChild(int16_t, int16_t, touchgfx::Drawable**)	24	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/containers/Container.hpp:43:5:touchgfx::Container::Container()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/hal/HAL.hpp:310:17:static touchgfx::LCD& touchgfx::HAL::lcd()	4	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/containers/Container.hpp:40:7:touchgfx::Container::~Container()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/containers/Container.hpp:40:7:virtual touchgfx::Container::~Container()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:46:13:touchgfx::Screen::~Screen()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:46:13:virtual touchgfx::Screen::~Screen()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:93:18:virtual void touchgfx::Screen::setupScreen()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:104:18:virtual void touchgfx::Screen::afterTransition()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:115:18:virtual void touchgfx::Screen::tearDownScreen()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:144:18:virtual void touchgfx::Screen::handleTickEvent()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:154:18:virtual void touchgfx::Screen::handleKeyEvent(uint8_t)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Screen.hpp:223:10:void touchgfx::Screen::add(touchgfx::Drawable&)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/Widget.hpp:36:7:touchgfx::Widget::Widget()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/Widget.hpp:36:7:touchgfx::Widget::~Widget()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/Widget.hpp:36:7:virtual touchgfx::Widget::~Widget()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:36:5:touchgfx::AbstractButton::AbstractButton()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:73:18:virtual void touchgfx::AbstractButton::executeAction()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:86:18:virtual bool touchgfx::AbstractButton::getPressedState() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:32:7:touchgfx::AbstractButton::~AbstractButton()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:32:7:virtual touchgfx::AbstractButton::~AbstractButton()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:35:5:touchgfx::TouchArea::TouchArea()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:40:18:virtual void touchgfx::TouchArea::draw(const touchgfx::Rect&) const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:44:18:virtual void touchgfx::TouchArea::handleDragEvent(const touchgfx::DragEvent&)	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:50:18:virtual touchgfx::Rect touchgfx::TouchArea::getSolidRect() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:65:18:virtual void touchgfx::TouchArea::invalidateContent() const	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:16:28:virtual touchgfx::Rect ProceduralWidget::getSolidRect() const	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/View.hpp:36:7:touchgfx::View<MainPresenter>::~View()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/View.hpp:36:7:virtual touchgfx::View<MainPresenter>::~View()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:13:7:ProceduralWidget::~ProceduralWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:13:7:virtual ProceduralWidget::~ProceduralWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:30:7:DesktopBackgroundWidget::~DesktopBackgroundWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:30:7:virtual DesktopBackgroundWidget::~DesktopBackgroundWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:41:7:DesktopIconWidget::~DesktopIconWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:41:7:virtual DesktopIconWidget::~DesktopIconWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:55:7:AppPanelWidget::~AppPanelWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:55:7:virtual AppPanelWidget::~AppPanelWidget()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:32:7:touchgfx::TouchArea::~TouchArea()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/TouchArea.hpp:32:7:virtual touchgfx::TouchArea::~TouchArea()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:116:7:TrackingTouchArea::~TrackingTouchArea()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:116:7:virtual TrackingTouchArea::~TrackingTouchArea()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:132:13:MainView::~MainView()	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:132:13:virtual MainView::~MainView()	16	static
+C:\ST\STM32CubeCLT_1.22.0\GNU-tools-for-STM32\bin\../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/cstring:109:3:char* std::strchr(char*, int)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:54:11:touchgfx::colortype {anonymous}::rgb(uint8_t, uint8_t, uint8_t)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:59:9:uint8_t {anonymous}::settingsGainFromX(int16_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:67:6:void {anonymous}::formatStopwatchTicks(uint32_t, char*)	72	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:89:6:void {anonymous}::formatLapNumber(uint8_t, char*)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:98:6:void {anonymous}::formatLapCount(uint8_t, char*)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:107:9:uint8_t {anonymous}::textLength(const char*)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:114:7:char* {anonymous}::appendUnsigned(char*, uint32_t)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:126:7:char* {anonymous}::appendUnsigned64(char*, uint64_t)	48	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:138:6:bool {anonymous}::formatCalculatorValue(double, char*)	72	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:167:6:char {anonymous}::calculatorKeyAt(int16_t, int16_t)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:194:6:touchgfx::Rect {anonymous}::calculatorKeyGlowRect(char)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:216:7:char* {anonymous}::appendText(char*, const char*)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:222:6:void {anonymous}::formatPercent(uint32_t, uint32_t, char*)	96	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:232:6:void {anonymous}::formatSignedTenths(int16_t, char*)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:246:6:void {anonymous}::formatUsage(uint32_t, uint32_t, char*)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:255:6:void {anonymous}::formatHeapValue(const char*, uint32_t, char*)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:263:7:char* {anonymous}::appendStorageAmount(char*, uint32_t)	56	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:282:6:void {anonymous}::formatStorageSummary(uint32_t, uint32_t, char*)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:292:6:void {anonymous}::formatStorageFree(uint32_t, char*)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:299:6:void {anonymous}::formatStoragePercent(uint32_t, uint32_t, char*)	80	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:314:6:void {anonymous}::formatFileSize(uint32_t, char*)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:330:6:void {anonymous}::formatRecorderTime(uint32_t, char*)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:346:6:void {anonymous}::formatPlayerTime(uint32_t, char*)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:360:6:bool {anonymous}::isWavEntry(const SD_StorageEntry&)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:374:9:uint8_t {anonymous}::wavEntryCount(const SD_StorageSnapshot&)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:383:24:const SD_StorageEntry* {anonymous}::wavEntryAt(const SD_StorageSnapshot&, uint8_t)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:393:6:void {anonymous}::getSystemMemoryUsage(uint32_t&, uint32_t&, uint32_t&, uint32_t&)	40	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:413:16:const uint8_t* {anonymous}::glyphFor(char)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:471:6:void ProceduralWidget::fillLocal(const touchgfx::Rect&, const touchgfx::Rect&, touchgfx::colortype) const	72	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:501:6:void ProceduralWidget::fillRounded(int16_t, int16_t, int16_t, int16_t, int16_t, touchgfx::colortype, const touchgfx::Rect&) const	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:534:6:void ProceduralWidget::drawText(const char*, int16_t, int16_t, uint8_t, touchgfx::colortype, const touchgfx::Rect&) const	64	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:561:6:void ProceduralWidget::drawCloseX(int16_t, int16_t, touchgfx::colortype, const touchgfx::Rect&) const	56	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:13:7:ProceduralWidget::ProceduralWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:569:1:DesktopBackgroundWidget::DesktopBackgroundWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:571:6:void DesktopBackgroundWidget::setPage(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:579:6:virtual void DesktopBackgroundWidget::draw(const touchgfx::Rect&) const	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:613:1:DesktopIconWidget::DesktopIconWidget()	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:615:6:void DesktopIconWidget::configure(uint8_t, const char*, uint8_t, uint8_t, uint8_t)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:622:6:void DesktopIconWidget::drawSymbol(const touchgfx::Rect&) const	216	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:741:6:virtual void DesktopIconWidget::draw(const touchgfx::Rect&) const	64	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:768:1:AppPanelWidget::AppPanelWidget()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:777:6:void AppPanelWidget::configure(uint8_t, const char*, uint8_t, uint8_t, uint8_t)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:787:6:void AppPanelWidget::invalidateStopwatchTime()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:793:6:void AppPanelWidget::invalidateStopwatchStartButton()	40	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:801:6:void AppPanelWidget::invalidateStopwatchLaps()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:807:6:void AppPanelWidget::invalidateStopwatchBody()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:813:6:void AppPanelWidget::invalidateSystemUsage()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:819:6:void AppPanelWidget::invalidateRecorder()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:825:6:void AppPanelWidget::invalidateCalculator()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:831:6:void AppPanelWidget::invalidateSpectrum()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:837:6:void AppPanelWidget::invalidateSettings()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:843:6:void AppPanelWidget::invalidateSettingsGain()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:849:6:void AppPanelWidget::resetCalculator()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:862:6:void AppPanelWidget::setCalculatorPressedKey(char)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:873:8:double AppPanelWidget::calculatorValue() const	48	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:900:6:bool AppPanelWidget::applyCalculatorOperation(double)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:926:6:void AppPanelWidget::calculatorPress(char)	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1039:6:void AppPanelWidget::invalidateFiles()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1045:6:void AppPanelWidget::invalidateMusic()	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1051:6:void AppPanelWidget::setStopwatchLapScroll(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1058:6:void AppPanelWidget::setFileScroll(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1065:6:void AppPanelWidget::setMusicScroll(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1072:6:void AppPanelWidget::setMusicDetail(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1079:6:void AppPanelWidget::drawStopwatch(const touchgfx::Rect&) const	176	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1172:6:void AppPanelWidget::drawSpectrum(const touchgfx::Rect&) const	552	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1340:6:void AppPanelWidget::drawSettings(const touchgfx::Rect&) const	248	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1533:6:void AppPanelWidget::drawCalculator(const touchgfx::Rect&) const	128	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1638:6:void AppPanelWidget::drawCards(const touchgfx::Rect&) const	128	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1729:33:AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const::<lambda(int16_t, int16_t, const char*, const char*, const char*, uint32_t, uint32_t, touchgfx::colortype)>	136	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1699:6:void AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const	152	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1765:6:void AppPanelWidget::drawMusicList(const touchgfx::Rect&) const	1736	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1850:6:void AppPanelWidget::drawMusicPlayer(const touchgfx::Rect&) const	256	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1937:6:void AppPanelWidget::drawMusic(const touchgfx::Rect&) const	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1943:6:void AppPanelWidget::drawFiles(const touchgfx::Rect&) const	1856	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2075:6:void AppPanelWidget::drawRecorder(const touchgfx::Rect&) const	184	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2164:6:virtual void AppPanelWidget::draw(const touchgfx::Rect&) const	88	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2200:1:TrackingTouchArea::TrackingTouchArea()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2202:6:void TrackingTouchArea::setOwner(MainView*)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2204:6:virtual void TrackingTouchArea::handleClickEvent(const touchgfx::ClickEvent&)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2210:6:virtual void TrackingTouchArea::handleDragEvent(const touchgfx::DragEvent&)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2216:1:MainView::MainView()	48	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2251:6:virtual void MainView::setupScreen()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2259:6:virtual void MainView::tearDownScreen()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2261:6:void MainView::setStripOffset(int16_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2278:6:void MainView::settleToPage(uint8_t)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2286:6:virtual void MainView::handleTickEvent()	1688	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2399:6:void MainView::handleTrackingClick(const touchgfx::ClickEvent&)	304	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2650:6:void MainView::handleTrackingDrag(const touchgfx::DragEvent&)	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2736:9:int16_t MainView::hitTestIcon(int16_t, int16_t) const	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2748:6:void MainView::openMusicFileAtRow(uint8_t)	1576	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2761:6:void MainView::openApp(uint8_t)	40	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2808:6:void MainView::closeApp()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/View.hpp:39:5:touchgfx::View<T>::View() [with T = MainPresenter]	16	static

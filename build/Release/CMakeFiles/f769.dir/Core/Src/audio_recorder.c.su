@@ -1,0 +1,14 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:61:13:Recorder_Publish	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:200:13:Recorder_QueuePcmHalfFromISR	32	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:97:13:Recorder_SendCommand	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:69:6:AudioRecorder_GetSnapshot.part.0	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:140:13:Recorder_MakeWavHeader	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:69:6:AudioRecorder_GetSnapshot	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:80:9:AudioRecorder_IsBusy	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:88:6:AudioRecorder_CreateResources	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:109:6:AudioRecorder_RequestStart	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:118:6:AudioRecorder_RequestStop	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:246:6:BSP_AUDIO_IN_HalfTransfer_CallBack	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:259:6:BSP_AUDIO_IN_TransferComplete_CallBack	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:272:6:BSP_AUDIO_IN_Error_CallBack	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_recorder.c:285:6:AudioRecorder_Task	2304	static

@@ -1,0 +1,13 @@
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/Presenter.hpp:37:18:virtual void touchgfx::Presenter::activate()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/Presenter.hpp:47:18:virtual void touchgfx::Presenter::deactivate()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/Presenter.hpp:52:13:touchgfx::Presenter::~Presenter()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/Presenter.hpp:52:13:virtual touchgfx::Presenter::~Presenter()	16	static
+C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/Presenter.hpp:58:5:touchgfx::Presenter::Presenter()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/model/ModelListener.hpp:9:5:ModelListener::ModelListener()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/model/ModelListener.hpp:10:13:ModelListener::~ModelListener()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/model/ModelListener.hpp:10:13:virtual ModelListener::~ModelListener()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainPresenter.hpp:13:13:MainPresenter::~MainPresenter()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainPresenter.hpp:13:13:virtual MainPresenter::~MainPresenter()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainPresenter.cpp:4:1:MainPresenter::MainPresenter(MainView&)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainPresenter.cpp:8:6:virtual void MainPresenter::activate()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainPresenter.cpp:12:6:virtual void MainPresenter::deactivate()	16	static

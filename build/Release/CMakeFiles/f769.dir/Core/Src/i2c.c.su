@@ -1,0 +1,4 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/i2c.c:31:6:MX_I2C1_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/i2c.c:74:6:MX_I2C4_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/i2c.c:119:6:HAL_I2C_MspInit	208	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/i2c.c:206:6:HAL_I2C_MspDeInit	8	static

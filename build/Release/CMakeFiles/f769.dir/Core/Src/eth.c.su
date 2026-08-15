@@ -1,0 +1,3 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/eth.c:52:6:MX_ETH_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/eth.c:96:6:HAL_ETH_MspInit	64	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/eth.c:149:6:HAL_ETH_MspDeInit	8	static

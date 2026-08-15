@@ -1,0 +1,9 @@
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:40:16:STORAGE_MediaAvailable	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:46:15:STORAGE_Init	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:58:15:STORAGE_GetCapacity	56	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:74:15:STORAGE_IsReady	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:96:15:STORAGE_IsWriteProtected	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:102:15:STORAGE_WaitReady	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:112:15:STORAGE_Read	32	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:127:15:STORAGE_Write	32	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_storage.c:142:15:STORAGE_GetMaxLun	4	static

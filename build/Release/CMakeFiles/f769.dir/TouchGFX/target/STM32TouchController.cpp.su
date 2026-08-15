@@ -1,0 +1,4 @@
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/target/STM32TouchController.hpp:38:7:STM32TouchController::~STM32TouchController()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/target/STM32TouchController.cpp:33:6:virtual void STM32TouchController::init()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/target/STM32TouchController.cpp:38:6:virtual bool STM32TouchController::sampleTouch(int32_t&, int32_t&)	24	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/target/STM32TouchController.hpp:38:7:virtual STM32TouchController::~STM32TouchController()	8	static

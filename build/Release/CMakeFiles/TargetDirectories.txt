@@ -1,0 +1,8 @@
+C:/Users/Gary/Desktop/f769/f769/build/Release/CMakeFiles/f769.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/CMakeFiles/edit_cache.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/CMakeFiles/rebuild_cache.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/cmake/stm32cubemx/CMakeFiles/FreeRTOS.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/cmake/stm32cubemx/CMakeFiles/FatFs.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/Gary/Desktop/f769/f769/build/Release/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

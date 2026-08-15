@@ -1,0 +1,6 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:41:6:MX_FMC_Init	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:90:13:SDRAM_Initialization_Sequence	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:143:13:HAL_FMC_MspInit	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:284:6:HAL_SDRAM_MspInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:296:13:HAL_FMC_MspDeInit	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/fmc.c:394:6:HAL_SDRAM_MspDeInit	16	static

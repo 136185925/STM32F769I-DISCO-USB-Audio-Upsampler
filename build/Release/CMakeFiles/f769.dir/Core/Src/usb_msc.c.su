@@ -1,0 +1,10 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:39:16:USB_Device_LinkIsHighSpeed	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:53:13:USB_MSC_Publish	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:159:13:USB_Device_Stop	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:118:16:USB_Device_Start	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:87:6:USB_MSC_CreateResources	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:93:6:USB_MSC_GetSnapshot	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:101:9:USB_MSC_IsActive	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:106:6:USB_MSC_WakeManager	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:111:6:USB_MSC_RequestEnable	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usb_msc.c:166:6:USB_MSC_Task	40	static

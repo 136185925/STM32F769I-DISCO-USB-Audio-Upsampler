@@ -1,0 +1,3 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dsihost.c:31:6:MX_DSIHOST_DSI_Init	248	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dsihost.c:155:6:HAL_DSI_MspInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dsihost.c:174:6:HAL_DSI_MspDeInit	0	static

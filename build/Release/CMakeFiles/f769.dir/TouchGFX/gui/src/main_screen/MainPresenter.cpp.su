@@ -1,0 +1,5 @@
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainPresenter.hpp:13:13:MainPresenter::~MainPresenter()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainPresenter.cpp:8:6:virtual void MainPresenter::activate()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainPresenter.hpp:13:13:virtual MainPresenter::~MainPresenter()	8	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainPresenter.hpp:13:13:virtual void* MainPresenter::_ZThn4_N13MainPresenterD1Ev()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainPresenter.cpp:4:1:MainPresenter::MainPresenter(MainView&)	0	static

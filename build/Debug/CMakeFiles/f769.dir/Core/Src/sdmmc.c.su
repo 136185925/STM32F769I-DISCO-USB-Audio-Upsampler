@@ -1,0 +1,14 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:43:6:MX_SDMMC2_SD_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:74:6:HAL_SD_MspInit	56	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:124:6:HAL_SD_MspDeInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:157:17:SD_DMA_EnterAtomic	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:165:13:SD_DMA_ExitAtomic	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:174:9:SD_DMA_IsClaimed	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:179:19:SD_DMA_Acquire	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:257:6:SD_DMA_Release	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:274:6:SD_DMA_BlockForDigitalAudio	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:297:6:SD_DMA_UnblockForDigitalAudio	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:304:9:SD_Card_IsPresent	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:310:9:SD_Card_IsInitialized	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:315:19:SD_Card_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/sdmmc.c:358:19:SD_Card_DeInit	16	static,ignoring_inline_asm

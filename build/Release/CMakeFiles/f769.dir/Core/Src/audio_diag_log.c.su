@@ -1,0 +1,4 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:55:13:AudioDiag_ExitCritical	0	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:142:16:AudioDiag_Write	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:95:6:AudioDiag_Log	72	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_diag_log.c:153:9:AudioDiag_Service	112	static,ignoring_inline_asm

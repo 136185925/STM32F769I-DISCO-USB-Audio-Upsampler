@@ -1,0 +1,12 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:98:13:Touch_SetReleased	0	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:87:13:Touch_WakeTaskFromISR	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:59:26:Touch_Read.constprop	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:173:19:Touch_Init	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:215:9:Touch_GetPoint	12	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:251:9:Touch_I2C_Reserve	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:286:6:Touch_I2C_Release	0	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:296:6:Touch_Task	56	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:414:6:HAL_I2C_MemRxCpltCallback	0	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:427:6:HAL_I2C_ErrorCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:440:6:HAL_I2C_AbortCpltCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/touch.c:452:6:HAL_GPIO_EXTI_Callback	0	static

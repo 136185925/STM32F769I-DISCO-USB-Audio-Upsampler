@@ -1,0 +1,12 @@
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:53:6:MX_FATFS_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:68:7:get_fattime	4	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:77:13:SD_Storage_Publish	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:86:13:SD_Storage_ResetVolume	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:104:16:SD_Storage_Scan	176	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:169:6:SD_Storage_GetSnapshot	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:180:9:SD_Storage_GetCachedEntryCount	16	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:189:6:SD_Storage_RequestRemount	4	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:194:6:SD_Storage_RequestUsbOwnership	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:200:9:SD_Storage_IsUsbOwned	4	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:205:9:SD_Storage_ApplicationAccessAllowed	4	static
+C:/Users/Gary/Desktop/f769/f769/FATFS/App/fatfs.c:210:6:SD_Storage_Task	1592	static

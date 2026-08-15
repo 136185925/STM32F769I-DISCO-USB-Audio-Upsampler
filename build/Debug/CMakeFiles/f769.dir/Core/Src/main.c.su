@@ -1,0 +1,8 @@
+\\?\C:\Users\Gary\Desktop\f769\f769\Drivers\CMSIS\Include\core_cm7.h:2229:22:SCB_EnableICache	4	static,ignoring_inline_asm
+\\?\C:\Users\Gary\Desktop\f769\f769\Drivers\CMSIS\Include\core_cm7.h:2281:22:SCB_EnableDCache	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:93:5:main	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:173:6:SystemClock_Config	88	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:238:6:PeriphCommonClock_Config	152	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:261:13:AudioDmaMpu_Config	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:291:6:HAL_TIM_PeriodElapsedCallback	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:309:6:Error_Handler	4	static,ignoring_inline_asm

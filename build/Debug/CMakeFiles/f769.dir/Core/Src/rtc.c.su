@@ -1,0 +1,15 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:49:6:MX_RTC_Init	72	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:145:6:HAL_RTC_MspInit	184	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:187:6:HAL_RTC_MspDeInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:212:6:HAL_RTCEx_WakeUpTimerEventCallback	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:226:6:Stopwatch_Toggle	16	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:239:6:Stopwatch_UserButtonIRQ	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:259:10:RTC_LSE_GetTicks	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:264:6:Stopwatch_Reset	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:285:9:Stopwatch_Lap	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:312:10:Stopwatch_GetTicks	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:317:9:Stopwatch_IsRunning	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:322:9:Stopwatch_GetLapCount	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:327:9:Stopwatch_GetLapNumber	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:332:10:Stopwatch_GetLapTicks	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/rtc.c:337:10:Stopwatch_GetLapTotalTicks	16	static

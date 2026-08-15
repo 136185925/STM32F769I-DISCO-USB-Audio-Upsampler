@@ -1,0 +1,5 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:173:6:SystemClock_Config	96	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:238:6:PeriphCommonClock_Config	152	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:93:5:main	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:291:6:HAL_TIM_PeriodElapsedCallback	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/main.c:309:6:Error_Handler	0	static,ignoring_inline_asm

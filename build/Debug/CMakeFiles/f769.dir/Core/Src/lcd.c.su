@@ -1,0 +1,16 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:51:19:LCD_Init	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:85:6:LCD_DrawHelloWorld	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:106:9:LCD_IsRefreshReady	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:111:19:LCD_SetTouchSquare	32	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:165:26:LCD_Refresh	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:171:13:LCD_SaveTouchBackground	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:186:13:LCD_RestoreTouchBackground	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:202:16:LCD_DSI_WriteReg	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:221:16:LCD_DSI_ReadReg	48	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:231:16:LCD_GetTick	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:236:13:LCD_Reset	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:244:13:LCD_Fill	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:254:13:LCD_FillRect	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:284:23:LCD_Glyph	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:308:13:LCD_DrawChar	48	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/lcd.c:327:13:LCD_DrawTextCentered	40	static

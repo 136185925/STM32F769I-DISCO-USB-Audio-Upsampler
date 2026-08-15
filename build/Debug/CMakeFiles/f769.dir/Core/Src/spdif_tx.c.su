@@ -1,0 +1,12 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:19:16:SPDIF_TX_ClockConfig	160	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:56:17:SPDIF_TX_MasterDivider	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:79:16:SPDIF_TX_SampleRateStatus	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:97:10:SPDIF_TX_EncodeSample	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:128:9:SPDIF_TX_Init	56	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:239:6:SPDIF_TX_DeInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:258:9:SPDIF_TX_Start	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:285:6:SPDIF_TX_Stop	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:295:6:SPDIF_TX_Pause	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:300:6:SPDIF_TX_Resume	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:305:9:SPDIF_TX_IsRunning	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_tx.c:310:6:SPDIF_TX_DmaIRQHandler	8	static

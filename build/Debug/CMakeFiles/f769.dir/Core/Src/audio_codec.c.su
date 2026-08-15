@@ -1,0 +1,6 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:15:6:AUDIO_IO_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:23:6:AUDIO_IO_DeInit	4	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:28:6:AUDIO_IO_Write	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:40:10:AUDIO_IO_Read	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:52:6:AUDIO_IO_Delay	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_codec.c:64:6:AudioCodec_BootInit	16	static

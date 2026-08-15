@@ -1,0 +1,7 @@
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:615:6:SCSI_SenseCode.constprop	8	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:1233:15:SCSI_ProcessWrite	48	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:1183:15:SCSI_ProcessRead	48	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:1157:15:SCSI_CheckAddressRange	16	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:1290:15:SCSI_UpdateBotData.isra	8	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:123:8:SCSI_ProcessCmd	40	static
+C:/Users/Gary/Desktop/f769/f769/Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.c:615:6:SCSI_SenseCode	8	static

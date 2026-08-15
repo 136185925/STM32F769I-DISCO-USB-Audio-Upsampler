@@ -1,0 +1,12 @@
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:165:10:USBD_MSC_DeviceDescriptor	0	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:189:10:USBD_MSC_LangIDStrDescriptor	0	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:337:13:IntToUnicode	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:245:10:USBD_MSC_SerialStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:171:10:USBD_AUDIO_DeviceDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:214:10:USBD_AUDIO_ProductStrDescriptor	16	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:233:10:USBD_MSC_ManufacturerStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:274:10:USBD_AUDIO_ConfigStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:301:10:USBD_AUDIO_InterfaceStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:201:10:USBD_MSC_ProductStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:261:10:USBD_MSC_ConfigStrDescriptor	8	static
+C:/Users/Gary/Desktop/f769/f769/USB_DEVICE/App/usbd_desc.c:288:10:USBD_MSC_InterfaceStrDescriptor	8	static

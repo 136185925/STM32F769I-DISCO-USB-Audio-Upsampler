@@ -1,0 +1,9 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:117:16:TouchGFX_DMA2D_UseInterrupt	8	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:125:26:TouchGFX_DMA2D_Wait	8	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:49:6:MX_DMA2D_Init	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:76:6:HAL_DMA2D_MspInit	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:96:6:HAL_DMA2D_MspDeInit	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:172:9:TouchGFX_DMA2D_IRQHandler	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:203:19:TouchGFX_DMA2D_FillRGB888	32	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:270:19:TouchGFX_DMA2D_CopyRGB888Rect	48	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/dma2d.c:261:19:TouchGFX_DMA2D_CopyRGB888	24	static

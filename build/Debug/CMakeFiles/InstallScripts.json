@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Gary/Desktop/f769/f769/build/Debug/cmake_install.cmake",
+		"C:/Users/Gary/Desktop/f769/f769/build/Debug/cmake/stm32cubemx/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

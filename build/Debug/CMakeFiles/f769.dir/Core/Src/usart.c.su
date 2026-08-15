@@ -1,0 +1,5 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usart.c:32:6:MX_UART5_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usart.c:63:6:MX_USART1_UART_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usart.c:94:6:MX_USART6_UART_Init	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usart.c:124:6:HAL_UART_MspInit	208	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/usart.c:248:6:HAL_UART_MspDeInit	16	static

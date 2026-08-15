@@ -1,0 +1,13 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:176:6:AudioSpectrum_GetSnapshot	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:184:6:AudioSpectrum_SetTriggerFrequency	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:205:6:AudioSpectrum_SetTriggerThreshold	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:221:6:AudioSpectrum_ResetTriggerStopwatch	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:235:6:AudioSpectrum_CreateResources	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:270:9:AudioSpectrum_IsBusy	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:278:6:AudioSpectrum_RequestStart	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:286:6:AudioSpectrum_RequestStop	0	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:335:6:AudioSpectrum_HalfTransferFromISR	40	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:342:6:AudioSpectrum_TransferCompleteFromISR	40	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:349:6:AudioSpectrum_ErrorFromISR	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:583:6:AudioSpectrum_TriggerTask	1112	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_spectrum.c:646:6:AudioSpectrum_Task	1336	static

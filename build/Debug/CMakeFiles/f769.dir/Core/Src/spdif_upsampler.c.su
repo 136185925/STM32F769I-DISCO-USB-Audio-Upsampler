@@ -1,0 +1,6 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:39:17:SPDIF_Upsampler4x_Random	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:49:16:SPDIF_Upsampler4x_Tpdf	40	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:61:16:SPDIF_Upsampler4x_Quantize	120	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:92:13:SPDIF_Upsampler4x_AccumulateStereo	104	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:123:6:SPDIF_Upsampler4x_Reset	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_upsampler.c:133:6:SPDIF_Upsampler4x_Process	88	static
