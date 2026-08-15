@@ -90,6 +90,7 @@ PCM → −1 dB → insert 3 zero samples → 14th-order Chebyshev-I IIR → fou
 - Approximately 0.25 dB passband ripple
 - The 44.1 kHz path has approximately 62 dB attenuation at the first image edge
 - The 48 kHz path has a wider transition band and higher image attenuation
+
 ####Features:
 - Compared with a Butterworth filter with the same transition band, a steeper cutoff can be achieved with a lower order
 - Uses Cortex-M7 hardware floating-point and FMA instructions
@@ -111,13 +112,16 @@ The FIR does not replace the IIR low-pass filter, but instead approximately corr
 - Different coefficients are used for 44.1 and 48 kHz
 - Target total group delay is 44 high-sample-rate samples
 - The primary optimization range is 0～18 kHz
+
 ####Corresponding target group delay:
 - 176.4 kHz: approximately 0.249 ms
 - 192 kHz: approximately 0.229 ms
+
 ####0～18 kHz group delay correction error:
 - 176.4 kHz: RMS approximately 0.71 samples
 - 192 kHz: RMS approximately 0.80 samples
 - When approaching the IIR's steep 20 kHz cutoff region, a finite-length causal FIR cannot completely reverse the IIR phase, so the phase correction capability in the 19～20 kHz range gradually decreases.
+
 ####Performance optimization:
 - FIR reduced from the original 64 taps to 32 taps
 - Loop unrolled once every 4 taps
@@ -129,12 +133,14 @@ At the end of the WAV, zero values continue to be fed in, allowing the IIR recur
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline, the filtering algorithm will not change the S/PDIF clock edges.
+
 ####Insufficient performance may cause:
 - DMA underrun
 - Repetition of the old buffer
 - PCM timeline jumps
 - Pops or stuttering
 - These are XRUNs or data discontinuities, not continuous clock jitter.
+
 ####The current S/PDIF DMA configuration is:
 - Circular DMA
 - Very High DMA Priority
