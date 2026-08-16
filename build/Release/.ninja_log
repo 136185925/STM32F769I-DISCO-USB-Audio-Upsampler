@@ -224,3 +224,13 @@
 23	412	8085539648411334	CMakeFiles/f769.dir/Core/Src/audio_player.c.obj	71bf20eed9f7a426
 44	1436	8085539648631333	CMakeFiles/f769.dir/TouchGFX/gui/src/main_screen/MainView.cpp.obj	477ea96744c34476
 1436	1609	8085539662551329	f769.elf	2960250a1984786b
+3	15	8085562835534427	C:/Users/Gary/Desktop/f769/f769/build/Release/CMakeFiles/cmake.verify_globs	1f2d8d845fcf87c0
+19	168	8085562835684427	CMakeFiles/f769.dir/Core/Src/freertos.c.obj	d8fefd0c0fa3b096
+40	176	8085562835894431	CMakeFiles/f769.dir/Core/Src/spdif_iir_upsampler.c.obj	763f223ec3ff5339
+33	246	8085562835824430	CMakeFiles/f769.dir/Core/Src/usb_msc.c.obj	91819746f99a8b86
+26	250	8085562835754429	CMakeFiles/f769.dir/Core/Src/audio_recorder.c.obj	73423dd12e43743c
+29	319	8085562835794428	CMakeFiles/f769.dir/Core/Src/audio_spectrum.c.obj	35c4c4eb3fac55de
+36	331	8085562835864431	CMakeFiles/f769.dir/Core/Src/usb_audio.c.obj	8b411efda4b32604
+22	358	8085562835724428	CMakeFiles/f769.dir/Core/Src/audio_player.c.obj	71bf20eed9f7a426
+44	1017	8085562835934433	CMakeFiles/f769.dir/TouchGFX/gui/src/main_screen/MainView.cpp.obj	477ea96744c34476
+1017	1202	8085562845674426	f769.elf	2960250a1984786b

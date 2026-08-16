@@ -10,6 +10,8 @@ extern "C" {
 #include "spdif_upsampler.h"
 
 #define SPDIF_IIR_UPSAMPLER_STAGES      7U
+#define SPDIF_BESSEL_UPSAMPLER_STAGES   10U
+#define SPDIF_IIR_UPSAMPLER_MAX_STAGES  SPDIF_BESSEL_UPSAMPLER_STAGES
 #define SPDIF_IIR_UPSAMPLER_TAIL_FRAMES 256U
 #define SPDIF_HYBRID_PHASE_TAPS          32U
 #define SPDIF_HYBRID_PHASE_DELAY_SAMPLES 44U
@@ -20,11 +22,12 @@ extern "C" {
 
 typedef struct
 {
-  float left_state[SPDIF_IIR_UPSAMPLER_STAGES][2];
-  float right_state[SPDIF_IIR_UPSAMPLER_STAGES][2];
+  float left_state[SPDIF_IIR_UPSAMPLER_MAX_STAGES][2];
+  float right_state[SPDIF_IIR_UPSAMPLER_MAX_STAGES][2];
   const float (*coefficients)[5];
   uint32_t dither_left;
   uint32_t dither_right;
+  uint8_t stage_count;
 } SPDIF_IirUpsampler4x;
 
 typedef struct
@@ -56,6 +59,8 @@ void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
                                   uint32_t source_rate);
 void SPDIF_HybridUpsampler4x_InitButterworth(
     SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
+void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state);
 
 /* Run the same IIR interpolator and final TPDF as 4X IIR, with a 32-tap FIR
@@ -72,10 +77,10 @@ void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 
-/* Causal Butterworth path with the phase-correction FIR bypassed. It keeps
- * the same TPDF and second-order error feedback as HYBRID NS2, but places no
- * FIR energy ahead of the main impulse and therefore adds no pre-echo. */
-void SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+/* Causal minimum-phase IIR path with the phase-correction FIR bypassed. It
+ * supports the selected Butterworth or Bessel coefficients and keeps the
+ * same TPDF plus second-order error feedback as HYBRID NS2. */
+void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped2(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 

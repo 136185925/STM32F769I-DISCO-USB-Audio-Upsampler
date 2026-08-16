@@ -92,6 +92,38 @@ static const float spdif_butterworth_coefficients_192k
     1.3104630977f, -0.85327468581f }
 };
 
+/* 20th-order Bessel-Thomson, ten unity-DC-gain DF2T sections ordered from
+ * the smallest to largest pole radius. The analog prototype is contracted
+ * to 78 percent of the source-Nyquist-normalized corner, placing -3 dB at
+ * 17.55/19.10 kHz for the 44.1/48 kHz families. This keeps all four
+ * polyphase peaks below full scale with the common -1 dB input headroom.
+ * The mode deliberately prioritizes a causal transient and flat group delay
+ * over high-treble flatness and the very narrow 44.1 kHz image transition. */
+static const float spdif_bessel_coefficients
+    [SPDIF_BESSEL_UPSAMPLER_STAGES][5] =
+{
+  { 0.211001400575f, 0.422002801150f, 0.211001400575f,
+    0.163700286161f, -0.00770588846051f },
+  { 0.213877535395f, 0.427755070790f, 0.213877535395f,
+    0.160036113555f, -0.0155462551350f },
+  { 0.219821655365f, 0.439643310730f, 0.219821655365f,
+    0.152368059768f, -0.0316546812286f },
+  { 0.229221233307f, 0.458442466614f, 0.229221233307f,
+    0.140097272018f, -0.0569822052463f },
+  { 0.242773973465f, 0.485547946930f, 0.242773973465f,
+    0.122030234793f, -0.0931261286520f },
+  { 0.261590897064f, 0.523181794129f, 0.261590897064f,
+    0.0963151189865f, -0.142678707244f },
+  { 0.287517080571f, 0.575034161141f, 0.287517080571f,
+    0.0597820810118f, -0.209850403295f },
+  { 0.323760764047f, 0.647521528093f, 0.323760764047f,
+    0.00683284945350f, -0.301875905640f },
+  { 0.376619877826f, 0.753239755652f, 0.376619877826f,
+    -0.0737443166404f, -0.432735194663f },
+  { 0.462103908184f, 0.924207816368f, 0.462103908184f,
+    -0.210985475568f, -0.637430157169f }
+};
+
 /* 32-tap causal phase equalizers fitted offline against each IIR response.
  * They approximate exp(-j*44*w) / exp(j*arg(H_iir)) in the 0..18 kHz band.
  * This revision halves the real-time FIR load so a complete 192 kHz DMA half
@@ -236,6 +268,7 @@ void SPDIF_IirUpsampler4x_Init(SPDIF_IirUpsampler4x *state,
   state->coefficients =
       (source_rate == 44100U) ? spdif_iir_coefficients_176k4 :
                                 spdif_iir_coefficients_192k;
+  state->stage_count = SPDIF_IIR_UPSAMPLER_STAGES;
   SPDIF_IirUpsampler4x_Reset(state);
 }
 
@@ -246,6 +279,16 @@ static void SPDIF_IirUpsampler4x_InitButterworth(
   state->coefficients =
       (source_rate == 44100U) ? spdif_butterworth_coefficients_176k4 :
                                 spdif_butterworth_coefficients_192k;
+  state->stage_count = SPDIF_IIR_UPSAMPLER_STAGES;
+  SPDIF_IirUpsampler4x_Reset(state);
+}
+
+static void SPDIF_IirUpsampler4x_InitBessel(
+    SPDIF_IirUpsampler4x *state)
+{
+  if (state == NULL) return;
+  state->coefficients = spdif_bessel_coefficients;
+  state->stage_count = SPDIF_BESSEL_UPSAMPLER_STAGES;
   SPDIF_IirUpsampler4x_Reset(state);
 }
 
@@ -260,8 +303,7 @@ static void SPDIF_IirUpsampler4x_ProcessFloat(
     float right_value = (phase == 0U) ?
         (float)right * SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB : 0.0f;
 
-    for (uint32_t stage = 0U;
-         stage < SPDIF_IIR_UPSAMPLER_STAGES; ++stage)
+    for (uint32_t stage = 0U; stage < state->stage_count; ++stage)
     {
       const float *coefficients = state->coefficients[stage];
       const float left_output =
@@ -346,6 +388,20 @@ void SPDIF_HybridUpsampler4x_InitButterworth(
   state->write_index = 0U;
 }
 
+void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate)
+{
+  (void)source_rate;
+  if (state == NULL) return;
+  SPDIF_IirUpsampler4x_InitBessel(&state->iir);
+  state->phase_coefficients = NULL;
+  memset(state->left_history, 0, sizeof(state->left_history));
+  memset(state->right_history, 0, sizeof(state->right_history));
+  memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
+  memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
+  state->write_index = 0U;
+}
+
 static void SPDIF_HybridUpsampler4x_ProcessInternal(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U], uint8_t noise_shaping)
@@ -423,7 +479,7 @@ void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
   SPDIF_HybridUpsampler4x_ProcessInternal(state, left, right, output, 1U);
 }
 
-void SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped2(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
 {
