@@ -39,6 +39,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | BTR MIN | 14th-order Butterworth IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Nonlinear phase | Medium-high |
 | BES MIN | 20th-order Bessel IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
 | BES OPEN | 20th-order Bessel IIR + 2nd order Noise shaping | −2.25 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
+| BES NS5 | 20th-order Bessel IIR + 5th order optimized Noise shaping | −1 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 ---
 
 ## NATIVE
@@ -149,6 +150,9 @@ Replace the 14th-order Butterworth with a 20th-order Bessel IIR to trade computa
 
 ## 4X BES OPEN
 Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，closer to the NOS state
+
+## 4X BES NS5
+20th-order Bessel IIR with 5th order optimized Noise shaping
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline,  the filtering algorithm will not change the S/PDIF clock edges.
