@@ -36,6 +36,8 @@ The selected setting is saved to the RTC backup register and remains retained af
 | HYBRID | 14th-order IIR + 32-tap FIR | −1 dB | Four-phase TPDF | Approximately fixed group delay | Highest |
 | HYBRID NS2 | 14th-order IIR + 32-tap FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
 | BTR NS2 | 14th-order Butterworth IIR + 32-tap soft FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
+| BTR MIN | 14th-order Butterworth IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Nonlinear phase | Medium-high |
+| BES MIN | 20th-order Bessel IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
 
 ---
 
