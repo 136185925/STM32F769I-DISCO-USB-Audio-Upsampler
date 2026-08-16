@@ -38,7 +38,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | BTR NS2 | 14th-order Butterworth IIR + 32-tap soft FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
 | BTR MIN | 14th-order Butterworth IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Nonlinear phase | Medium-high |
 | BES MIN | 20th-order Bessel IIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
-
+| BES OPEN | 20th-order Bessel IIR + 2nd order Noise shaping | −2.25 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
 ---
 
 ## NATIVE
