@@ -25,6 +25,7 @@ typedef struct
   float left_state[SPDIF_IIR_UPSAMPLER_MAX_STAGES][2];
   float right_state[SPDIF_IIR_UPSAMPLER_MAX_STAGES][2];
   const float (*coefficients)[5];
+  float input_gain;
   uint32_t dither_left;
   uint32_t dither_right;
   uint8_t stage_count;
@@ -49,8 +50,8 @@ void SPDIF_IirUpsampler4x_Reset(SPDIF_IirUpsampler4x *state);
 
 /* Insert three zero-valued phases after each input frame, pass the resulting
  * 4x stream through a 14th-order low-pass IIR, and quantize every stereo
- * phase to 16 bit with final-stage TPDF. The interpolation path includes the
- * same -1 dB input gain used by the FIR 4X TPDF mode. */
+ * phase to 16 bit with final-stage TPDF. The selected profile supplies its
+ * input headroom: normally -1 dB, or -2.25 dB for the open Bessel mode. */
 void SPDIF_IirUpsampler4x_Process(
     SPDIF_IirUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
@@ -60,6 +61,8 @@ void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
 void SPDIF_HybridUpsampler4x_InitButterworth(
     SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
+void SPDIF_MinimumPhaseUpsampler4x_InitBesselOpen(
     SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state);
 

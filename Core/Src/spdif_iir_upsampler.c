@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB 3.56500363f
+#define SPDIF_BESSEL_OPEN_GAIN_4X_MINUS_2P25DB 3.08716606f
 #define SPDIF_IIR_DITHER_LEFT_SEED         0x9E3779B9U
 #define SPDIF_IIR_DITHER_RIGHT_SEED        0x243F6A88U
 
@@ -122,6 +123,36 @@ static const float spdif_bessel_coefficients
     -0.0737443166404f, -0.432735194663f },
   { 0.462103908184f, 0.924207816368f, 0.462103908184f,
     -0.210985475568f, -0.637430157169f }
+};
+
+/* More open version of the same 20th-order Bessel-Thomson prototype. Its
+ * analog corner is 90 percent of the source-Nyquist-normalized design,
+ * placing -3 dB at 20.04/21.81 kHz for the 44.1/48 kHz families. The wider
+ * transition deliberately permits more ultrasonic imaging. A separate
+ * -2.25 dB input gain keeps the resulting four-phase peak below full scale. */
+static const float spdif_bessel_open_coefficients
+    [SPDIF_BESSEL_UPSAMPLER_STAGES][5] =
+{
+  { 0.245077015713f, 0.490154031425f, 0.245077015713f,
+    0.0208201363834f, -0.00112819923343f },
+  { 0.248341815843f, 0.496683631686f, 0.248341815843f,
+    0.0159557145024f, -0.00932297787417f },
+  { 0.255081251204f, 0.510162502409f, 0.255081251204f,
+    0.00582870258999f, -0.0261537074078f },
+  { 0.265718398945f, 0.531436797890f, 0.265718398945f,
+    -0.0102853385113f, -0.0525882572680f },
+  { 0.281010507674f, 0.562021015348f, 0.281010507674f,
+    -0.0337864824342f, -0.0902555482619f },
+  { 0.302154435720f, 0.604308871441f, 0.302154435720f,
+    -0.0668444998934f, -0.141773242988f },
+  { 0.331117277310f, 0.662234554620f, 0.331117277310f,
+    -0.113110575670f, -0.211358533570f },
+  { 0.371273517173f, 0.742547034346f, 0.371273517173f,
+    -0.178926308906f, -0.306167759787f },
+  { 0.429136331630f, 0.858272663260f, 0.429136331630f,
+    -0.276728396233f, -0.439816930288f },
+  { 0.520931611076f, 1.041863222150f, 0.520931611076f,
+    -0.437956038862f, -0.645770405442f }
 };
 
 /* 32-tap causal phase equalizers fitted offline against each IIR response.
@@ -268,6 +299,7 @@ void SPDIF_IirUpsampler4x_Init(SPDIF_IirUpsampler4x *state,
   state->coefficients =
       (source_rate == 44100U) ? spdif_iir_coefficients_176k4 :
                                 spdif_iir_coefficients_192k;
+  state->input_gain = SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB;
   state->stage_count = SPDIF_IIR_UPSAMPLER_STAGES;
   SPDIF_IirUpsampler4x_Reset(state);
 }
@@ -279,6 +311,7 @@ static void SPDIF_IirUpsampler4x_InitButterworth(
   state->coefficients =
       (source_rate == 44100U) ? spdif_butterworth_coefficients_176k4 :
                                 spdif_butterworth_coefficients_192k;
+  state->input_gain = SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB;
   state->stage_count = SPDIF_IIR_UPSAMPLER_STAGES;
   SPDIF_IirUpsampler4x_Reset(state);
 }
@@ -288,6 +321,17 @@ static void SPDIF_IirUpsampler4x_InitBessel(
 {
   if (state == NULL) return;
   state->coefficients = spdif_bessel_coefficients;
+  state->input_gain = SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB;
+  state->stage_count = SPDIF_BESSEL_UPSAMPLER_STAGES;
+  SPDIF_IirUpsampler4x_Reset(state);
+}
+
+static void SPDIF_IirUpsampler4x_InitBesselOpen(
+    SPDIF_IirUpsampler4x *state)
+{
+  if (state == NULL) return;
+  state->coefficients = spdif_bessel_open_coefficients;
+  state->input_gain = SPDIF_BESSEL_OPEN_GAIN_4X_MINUS_2P25DB;
   state->stage_count = SPDIF_BESSEL_UPSAMPLER_STAGES;
   SPDIF_IirUpsampler4x_Reset(state);
 }
@@ -299,9 +343,9 @@ static void SPDIF_IirUpsampler4x_ProcessFloat(
   for (uint32_t phase = 0U; phase < SPDIF_UPSAMPLER_FACTOR; ++phase)
   {
     float left_value = (phase == 0U) ?
-        (float)left * SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB : 0.0f;
+        (float)left * state->input_gain : 0.0f;
     float right_value = (phase == 0U) ?
-        (float)right * SPDIF_IIR_INPUT_GAIN_4X_MINUS_1DB : 0.0f;
+        (float)right * state->input_gain : 0.0f;
 
     for (uint32_t stage = 0U; stage < state->stage_count; ++stage)
     {
@@ -394,6 +438,20 @@ void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
   (void)source_rate;
   if (state == NULL) return;
   SPDIF_IirUpsampler4x_InitBessel(&state->iir);
+  state->phase_coefficients = NULL;
+  memset(state->left_history, 0, sizeof(state->left_history));
+  memset(state->right_history, 0, sizeof(state->right_history));
+  memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
+  memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
+  state->write_index = 0U;
+}
+
+void SPDIF_MinimumPhaseUpsampler4x_InitBesselOpen(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate)
+{
+  (void)source_rate;
+  if (state == NULL) return;
+  SPDIF_IirUpsampler4x_InitBesselOpen(&state->iir);
   state->phase_coefficients = NULL;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));

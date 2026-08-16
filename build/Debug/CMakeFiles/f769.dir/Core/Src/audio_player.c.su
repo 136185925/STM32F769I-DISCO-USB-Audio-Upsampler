@@ -18,10 +18,10 @@ C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:243:16:Player_ParseWave	
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:328:17:Player_FillSpdifUpsampledHalf	136	static,ignoring_inline_asm
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:499:17:Player_FillHalf	144	static,ignoring_inline_asm
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:614:16:Player_CodecInit	24	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:695:16:Player_CodecCommand	24	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:743:16:Player_StartOutput	16	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:758:13:Player_Close	24	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:774:6:AudioPlayer_Task	800	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1077:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	24	static,ignoring_inline_asm
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1094:6:BSP_AUDIO_OUT_TransferComplete_CallBack	24	static,ignoring_inline_asm
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1111:6:BSP_AUDIO_OUT_Error_CallBack	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:702:16:Player_CodecCommand	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:750:16:Player_StartOutput	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:765:13:Player_Close	24	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:781:6:AudioPlayer_Task	800	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1084:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1101:6:BSP_AUDIO_OUT_TransferComplete_CallBack	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1118:6:BSP_AUDIO_OUT_Error_CallBack	8	static
