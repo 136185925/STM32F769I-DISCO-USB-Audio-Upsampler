@@ -82,6 +82,7 @@ static uint8_t player_spdif_tpdf;
 static uint8_t player_spdif_iir;
 static uint8_t player_spdif_hybrid;
 static uint8_t player_spdif_hybrid_ns2;
+static uint8_t player_spdif_butterworth_minphase_ns2;
 static uint32_t player_spdif_status_frame;
 static SPDIF_Upsampler4x player_spdif_upsampler;
 static SPDIF_IirUpsampler4x player_spdif_iir_upsampler;
@@ -373,6 +374,11 @@ static uint32_t Player_FillSpdifUpsampledHalf(
       SPDIF_IirUpsampler4x_Process(&player_spdif_iir_upsampler, left, right,
                                    interpolated);
     }
+    else if (player_spdif_butterworth_minphase_ns2 != 0U)
+    {
+      SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+          &player_spdif_hybrid_upsampler, left, right, interpolated);
+    }
     else if (player_spdif_hybrid_ns2 != 0U)
     {
       SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
@@ -409,7 +415,9 @@ static uint32_t Player_FillSpdifUpsampledHalf(
       (source_bytes != 0U) &&
       ((loaded_bytes + source_bytes) >= wave->data_bytes))
   {
-    if ((player_spdif_hybrid != 0U) ||
+    if (player_spdif_butterworth_minphase_ns2 != 0U)
+      player_spdif_tail_frames = SPDIF_IIR_UPSAMPLER_TAIL_FRAMES;
+    else if ((player_spdif_hybrid != 0U) ||
         (player_spdif_hybrid_ns2 != 0U))
       player_spdif_tail_frames = SPDIF_HYBRID_UPSAMPLER_TAIL_FRAMES;
     else if (player_spdif_iir != 0U)
@@ -429,6 +437,11 @@ static uint32_t Player_FillSpdifUpsampledHalf(
     {
       SPDIF_IirUpsampler4x_Process(&player_spdif_iir_upsampler, 0, 0,
                                    interpolated);
+    }
+    else if (player_spdif_butterworth_minphase_ns2 != 0U)
+    {
+      SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+          &player_spdif_hybrid_upsampler, 0, 0, interpolated);
     }
     else if (player_spdif_hybrid_ns2 != 0U)
     {
@@ -610,6 +623,7 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   player_spdif_iir = 0U;
   player_spdif_hybrid = 0U;
   player_spdif_hybrid_ns2 = 0U;
+  player_spdif_butterworth_minphase_ns2 = 0U;
   player_spdif_tail_frames = 0U;
   SPDIF_Upsampler4x_Reset(&player_spdif_upsampler);
   SPDIF_IirUpsampler4x_Init(&player_spdif_iir_upsampler, sample_rate);
@@ -617,7 +631,9 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   if (player_output == USB_AUDIO_OUTPUT_SPDIF)
   {
     const USB_AudioSpdifMode spdif_mode = USB_Audio_GetSpdifMode();
-    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2)
+    if ((spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2) ||
+        (spdif_mode ==
+         USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2))
     {
       SPDIF_HybridUpsampler4x_InitButterworth(
           &player_spdif_hybrid_upsampler, sample_rate);
@@ -647,6 +663,10 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
          ((spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2) ||
           (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2))) ?
         1U : 0U;
+    player_spdif_butterworth_minphase_ns2 =
+        ((player_spdif_upsample != 0U) &&
+         (spdif_mode ==
+          USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2)) ? 1U : 0U;
     return (SPDIF_TX_Init(player_spdif_upsample != 0U ?
                           sample_rate * PLAYER_SPDIF_FACTOR : sample_rate,
                           bits_per_sample)

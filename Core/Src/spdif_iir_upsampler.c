@@ -422,3 +422,22 @@ void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
 {
   SPDIF_HybridUpsampler4x_ProcessInternal(state, left, right, output, 1U);
 }
+
+void SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
+{
+  float filtered[SPDIF_UPSAMPLER_FACTOR * 2U];
+  SPDIF_IirUpsampler4x_ProcessFloat(&state->iir, left, right, filtered);
+  for (uint32_t phase = 0U; phase < SPDIF_UPSAMPLER_FACTOR; ++phase)
+  {
+    output[phase * 2U] =
+        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
+            filtered[phase * 2U], &state->iir.dither_left,
+            state->noise_error_left);
+    output[phase * 2U + 1U] =
+        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
+            filtered[phase * 2U + 1U], &state->iir.dither_right,
+            state->noise_error_right);
+  }
+}

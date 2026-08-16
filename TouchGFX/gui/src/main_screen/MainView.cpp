@@ -1508,51 +1508,59 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             const bool butterworthNs2 =
                 audio.spdif_mode ==
                     USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2;
+            const bool butterworthMinNs2 =
+                audio.spdif_mode ==
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2;
             drawText("S/PDIF MODE", 122,
                      static_cast<int16_t>(378 - offset), 1, muted,
                      contentDirty);
             const int16_t modeY = static_cast<int16_t>(367 - offset);
-            fillRounded(220, modeY, 52, 29, 9,
+            fillRounded(220, modeY, 48, 29, 8,
                         (repeat || exact || headroom || tpdf || iir || hybrid ||
-                         hybridNs2 || butterworthNs2) ?
+                         hybridNs2 || butterworthNs2 || butterworthMinNs2) ?
                             track : rgb(40, 113, 132), contentDirty);
-            fillRounded(276, modeY, 52, 29, 9,
+            fillRounded(270, modeY, 48, 29, 8,
                         repeat ? rgb(35, 125, 103) : track, contentDirty);
-            fillRounded(332, modeY, 52, 29, 9,
+            fillRounded(320, modeY, 48, 29, 8,
                         exact ? rgb(92, 58, 123) : track, contentDirty);
-            fillRounded(388, modeY, 52, 29, 9,
+            fillRounded(370, modeY, 48, 29, 8,
                         headroom ? rgb(160, 105, 38) : track, contentDirty);
-            fillRounded(444, modeY, 52, 29, 9,
+            fillRounded(420, modeY, 48, 29, 8,
                         tpdf ? rgb(153, 62, 128) : track, contentDirty);
-            fillRounded(500, modeY, 52, 29, 9,
+            fillRounded(470, modeY, 48, 29, 8,
                         iir ? rgb(46, 105, 154) : track, contentDirty);
-            fillRounded(556, modeY, 52, 29, 9,
+            fillRounded(520, modeY, 48, 29, 8,
                         hybrid ? rgb(45, 126, 142) : track, contentDirty);
-            fillRounded(612, modeY, 52, 29, 9,
+            fillRounded(570, modeY, 48, 29, 8,
                         hybridNs2 ? rgb(42, 145, 114) : track, contentDirty);
-            fillRounded(668, modeY, 52, 29, 9,
+            fillRounded(620, modeY, 48, 29, 8,
                         butterworthNs2 ? rgb(113, 91, 170) : track,
                         contentDirty);
-            drawText("NATIVE", 228, static_cast<int16_t>(376 - offset), 1,
+            fillRounded(670, modeY, 48, 29, 8,
+                        butterworthMinNs2 ? rgb(169, 92, 70) : track,
+                        contentDirty);
+            drawText("NATIVE", 226, static_cast<int16_t>(376 - offset), 1,
                      (repeat || exact || headroom || tpdf || iir || hybrid ||
-                      hybridNs2 || butterworthNs2) ?
+                      hybridNs2 || butterworthNs2 || butterworthMinNs2) ?
                          muted : white, contentDirty);
-            drawText("4X HOLD", 281, static_cast<int16_t>(376 - offset), 1,
+            drawText("4X HOLD", 273, static_cast<int16_t>(376 - offset), 1,
                      repeat ? white : muted, contentDirty);
-            drawText("4X EXACT", 334, static_cast<int16_t>(376 - offset), 1,
+            drawText("4X EXACT", 320, static_cast<int16_t>(376 - offset), 1,
                      exact ? white : muted, contentDirty);
-            drawText("4X -1DB", 393, static_cast<int16_t>(376 - offset), 1,
+            drawText("4X -1DB", 373, static_cast<int16_t>(376 - offset), 1,
                      headroom ? white : muted, contentDirty);
-            drawText("4X TPDF", 449, static_cast<int16_t>(376 - offset), 1,
+            drawText("4X TPDF", 423, static_cast<int16_t>(376 - offset), 1,
                      tpdf ? white : muted, contentDirty);
-            drawText("4X IIR", 508, static_cast<int16_t>(376 - offset), 1,
+            drawText("4X IIR", 476, static_cast<int16_t>(376 - offset), 1,
                      iir ? white : muted, contentDirty);
-            drawText("HYBRID", 564, static_cast<int16_t>(376 - offset), 1,
+            drawText("HYBRID", 526, static_cast<int16_t>(376 - offset), 1,
                      hybrid ? white : muted, contentDirty);
-            drawText("HYB NS2", 617, static_cast<int16_t>(376 - offset), 1,
+            drawText("HYB NS2", 573, static_cast<int16_t>(376 - offset), 1,
                      hybridNs2 ? white : muted, contentDirty);
-            drawText("BTR NS2", 673, static_cast<int16_t>(376 - offset), 1,
+            drawText("BTR NS2", 623, static_cast<int16_t>(376 - offset), 1,
                      butterworthNs2 ? white : muted, contentDirty);
+            drawText("BTR MIN", 673, static_cast<int16_t>(376 - offset), 1,
+                     butterworthMinNs2 ? white : muted, contentDirty);
         } else {
             char gainText[5];
             formatPercent(audio.volume, 100U, gainText);
@@ -2807,48 +2815,53 @@ void MainView::handleTrackingClick(const ClickEvent& event)
             } else if (contentPressY >= 364 && contentPressY <= 400 &&
                        contentReleaseY >= 364 &&
                        contentReleaseY <= 400) {
-                if (pressX >= 220 && pressX <= 274 &&
-                    x >= 220 && x <= 274) {
+                if (pressX >= 220 && pressX <= 268 &&
+                    x >= 220 && x <= 268) {
                     USB_Audio_RequestSpdifMode(USB_AUDIO_SPDIF_NATIVE);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 275 && pressX <= 330 &&
-                           x >= 275 && x <= 330) {
+                } else if (pressX >= 269 && pressX <= 318 &&
+                           x >= 269 && x <= 318) {
                     USB_Audio_RequestSpdifMode(USB_AUDIO_SPDIF_REPEAT_4X);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 331 && pressX <= 386 &&
-                           x >= 331 && x <= 386) {
+                } else if (pressX >= 319 && pressX <= 368 &&
+                           x >= 319 && x <= 368) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 387 && pressX <= 442 &&
-                           x >= 387 && x <= 442) {
+                } else if (pressX >= 369 && pressX <= 418 &&
+                           x >= 369 && x <= 418) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_HEADROOM);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 443 && pressX <= 498 &&
-                           x >= 443 && x <= 498) {
+                } else if (pressX >= 419 && pressX <= 468 &&
+                           x >= 419 && x <= 468) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_TPDF);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 499 && pressX <= 554 &&
-                           x >= 499 && x <= 554) {
+                } else if (pressX >= 469 && pressX <= 518 &&
+                           x >= 469 && x <= 518) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 555 && pressX <= 610 &&
-                           x >= 555 && x <= 610) {
+                } else if (pressX >= 519 && pressX <= 568 &&
+                           x >= 519 && x <= 568) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 611 && pressX <= 666 &&
-                           x >= 611 && x <= 666) {
+                } else if (pressX >= 569 && pressX <= 618 &&
+                           x >= 569 && x <= 618) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 667 && pressX <= 722 &&
-                           x >= 667 && x <= 722) {
+                } else if (pressX >= 619 && pressX <= 668 &&
+                           x >= 619 && x <= 668) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2);
+                    appPanel.invalidateSettings();
+                } else if (pressX >= 669 && pressX <= 720 &&
+                           x >= 669 && x <= 720) {
+                    USB_Audio_RequestSpdifMode(
+                        USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2);
                     appPanel.invalidateSettings();
                 }
             }

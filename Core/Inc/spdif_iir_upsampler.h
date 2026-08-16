@@ -72,6 +72,13 @@ void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 
+/* Causal Butterworth path with the phase-correction FIR bypassed. It keeps
+ * the same TPDF and second-order error feedback as HYBRID NS2, but places no
+ * FIR energy ahead of the main impulse and therefore adds no pre-echo. */
+void SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
+
 #ifdef __cplusplus
 }
 #endif

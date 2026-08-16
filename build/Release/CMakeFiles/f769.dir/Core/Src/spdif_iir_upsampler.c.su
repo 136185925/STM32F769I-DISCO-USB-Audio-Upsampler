@@ -11,3 +11,4 @@ C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_iir_upsampler.c:318:6:SPDIF_Hybri
 C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_iir_upsampler.c:333:6:SPDIF_HybridUpsampler4x_InitButterworth	16	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_iir_upsampler.c:412:6:SPDIF_HybridUpsampler4x_Process	16	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_iir_upsampler.c:419:6:SPDIF_HybridUpsampler4x_ProcessNoiseShaped2	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_iir_upsampler.c:426:6:SPDIF_ButterworthUpsampler4x_ProcessMinimumPhaseNoiseShaped2	64	static
