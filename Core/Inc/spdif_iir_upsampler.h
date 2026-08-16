@@ -13,6 +13,7 @@ extern "C" {
 #define SPDIF_IIR_UPSAMPLER_TAIL_FRAMES 256U
 #define SPDIF_HYBRID_PHASE_TAPS          32U
 #define SPDIF_HYBRID_PHASE_DELAY_SAMPLES 44U
+#define SPDIF_BUTTERWORTH_PHASE_DELAY_SAMPLES 36U
 #define SPDIF_HYBRID_UPSAMPLER_TAIL_FRAMES \
     (SPDIF_IIR_UPSAMPLER_TAIL_FRAMES + \
      SPDIF_HYBRID_PHASE_TAPS / SPDIF_UPSAMPLER_FACTOR)
@@ -53,6 +54,8 @@ void SPDIF_IirUpsampler4x_Process(
 
 void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
                                   uint32_t source_rate);
+void SPDIF_HybridUpsampler4x_InitButterworth(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state);
 
 /* Run the same IIR interpolator and final TPDF as 4X IIR, with a 32-tap FIR

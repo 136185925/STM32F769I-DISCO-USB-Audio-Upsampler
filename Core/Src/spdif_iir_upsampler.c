@@ -48,6 +48,50 @@ static const float spdif_iir_coefficients_192k
     1.566570880f, -0.9795072119f }
 };
 
+/* 14th-order maximally-flat Butterworth alternatives. The 44.1 kHz family
+ * uses a 21 kHz corner to keep its narrow image transition bounded; the
+ * 48 kHz family places the -3 dB corner at the 24 kHz source Nyquist. This
+ * deliberately trades some ultrasonic image rejection for a gentler,
+ * ripple-free transition. Sections run from low Q to high Q so intermediate
+ * DF2T levels remain well behaved. Each section has unity DC gain. */
+static const float spdif_butterworth_coefficients_176k4
+    [SPDIF_IIR_UPSAMPLER_STAGES][5] =
+{
+  { 0.079643407300f, 0.15928681460f, 0.079643407300f,
+    0.87481787867f, -0.19339150787f },
+  { 0.081287309743f, 0.16257461949f, 0.081287309743f,
+    0.89287480637f, -0.21802404534f },
+  { 0.084696033284f, 0.16939206657f, 0.084696033284f,
+    0.93031685461f, -0.26910098774f },
+  { 0.090127037042f, 0.18025407408f, 0.090127037042f,
+    0.98997200182f, -0.35048014999f },
+  { 0.098007665987f, 0.19601533197f, 0.098007665987f,
+    1.0765342840f, -0.46856494794f },
+  { 0.10898984310f, 0.21797968619f, 0.10898984310f,
+    1.1971645434f, -0.63312391578f },
+  { 0.12402864014f, 0.24805728029f, 0.12402864014f,
+    1.3623534646f, -0.85846802513f }
+};
+
+static const float spdif_butterworth_coefficients_192k
+    [SPDIF_IIR_UPSAMPLER_STAGES][5] =
+{
+  { 0.086010450809f, 0.17202090162f, 0.086010450809f,
+    0.83059038739f, -0.17463219063f },
+  { 0.087827935243f, 0.17565587049f, 0.087827935243f,
+    0.84814156967f, -0.19945331064f },
+  { 0.091602159380f, 0.18320431876f, 0.091602159380f,
+    0.88458870207f, -0.25099733959f },
+  { 0.097631072938f, 0.19526214588f, 0.097631072938f,
+    0.94280904158f, -0.33333333333f },
+  { 0.10641348504f, 0.21282697009f, 0.10641348504f,
+    1.0276195153f, -0.45327345543f },
+  { 0.11872035358f, 0.23744070717f, 0.11872035358f,
+    1.1464651510f, -0.62134656536f },
+  { 0.13570289702f, 0.27140579404f, 0.13570289702f,
+    1.3104630977f, -0.85327468581f }
+};
+
 /* 32-tap causal phase equalizers fitted offline against each IIR response.
  * They approximate exp(-j*44*w) / exp(j*arg(H_iir)) in the 0..18 kHz band.
  * This revision halves the real-time FIR load so a complete 192 kHz DMA half
@@ -76,6 +120,38 @@ static const float spdif_phase_coefficients_192k
   0.1383882815f, 0.1034580768f, 0.07636940762f, 0.07654126389f,
   0.1195250608f, 0.1709837962f, 0.1985838454f, 0.1572284855f,
   0.05794067397f, -0.05505257855f, -0.06956457477f, 0.1223433475f
+};
+
+/* SOFT PHASE equalizers for the Butterworth alternatives. Starting from a
+ * 25-output-sample pure delay, weighted least squares applies 65 percent of
+ * the correction toward a 36-sample linear-phase target. Fit weight is one
+ * through 12 kHz, tapers to 0.7 at 16 kHz and 0.35 at 18 kHz, with 1e-6
+ * Tikhonov regularization. Both sets are unity at DC and avoid ultrasonic
+ * FIR gain while retaining less aggressive Butterworth phase behaviour. */
+static const float spdif_butterworth_phase_coefficients_176k4
+    [SPDIF_HYBRID_PHASE_TAPS] =
+{
+  -0.034405022499f, 0.075659266018f, 0.0048470643064f, -0.061590663124f,
+  -0.049757283921f, 0.014433173290f, 0.065551110276f, 0.059788772665f,
+  0.0032850648520f, -0.059550089419f, -0.081371944958f, -0.044756205579f,
+  0.027429303267f, 0.088061351385f, 0.096178117257f, 0.042499649305f,
+  -0.044819895326f, -0.11660286830f, -0.13067996948f, -0.074889845815f,
+  0.027836039879f, 0.13414930226f, 0.20490843009f, 0.22452370507f,
+  0.20381421893f, 0.16621938667f, 0.12849317748f, 0.091085993828f,
+  0.046621169259f, 0.0000096299071549f, -0.020595345081f, 0.013625207497f
+};
+
+static const float spdif_butterworth_phase_coefficients_192k
+    [SPDIF_HYBRID_PHASE_TAPS] =
+{
+  -0.014984849789f, 0.030633088842f, 0.0062772518006f, -0.023230702048f,
+  -0.025227240912f, -0.0019911386526f, 0.024252551848f, 0.031906242164f,
+  0.014663992186f, -0.015873976406f, -0.038791447076f, -0.037394080822f,
+  -0.0097280865645f, 0.029587975420f, 0.057034910777f, 0.053235209830f,
+  0.014511550683f, -0.043187806049f, -0.090419418414f, -0.097888604525f,
+  -0.051208350434f, 0.040513399062f, 0.14693346944f, 0.22921818726f,
+  0.25770277772f, 0.22599685259f, 0.15407995270f, 0.077782996146f,
+  0.028879444548f, 0.015807839869f, 0.016871374693f, -0.0059633658854f
 };
 
 static uint32_t SPDIF_IirUpsampler4x_Random(uint32_t *state)
@@ -163,6 +239,16 @@ void SPDIF_IirUpsampler4x_Init(SPDIF_IirUpsampler4x *state,
   SPDIF_IirUpsampler4x_Reset(state);
 }
 
+static void SPDIF_IirUpsampler4x_InitButterworth(
+    SPDIF_IirUpsampler4x *state, uint32_t source_rate)
+{
+  if (state == NULL) return;
+  state->coefficients =
+      (source_rate == 44100U) ? spdif_butterworth_coefficients_176k4 :
+                                spdif_butterworth_coefficients_192k;
+  SPDIF_IirUpsampler4x_Reset(state);
+}
+
 static void SPDIF_IirUpsampler4x_ProcessFloat(
     SPDIF_IirUpsampler4x *state, int16_t left, int16_t right,
     float output[SPDIF_UPSAMPLER_FACTOR * 2U])
@@ -237,6 +323,22 @@ void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
   state->phase_coefficients =
       (source_rate == 44100U) ? spdif_phase_coefficients_176k4 :
                                 spdif_phase_coefficients_192k;
+  memset(state->left_history, 0, sizeof(state->left_history));
+  memset(state->right_history, 0, sizeof(state->right_history));
+  memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
+  memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
+  state->write_index = 0U;
+}
+
+void SPDIF_HybridUpsampler4x_InitButterworth(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate)
+{
+  if (state == NULL) return;
+  SPDIF_IirUpsampler4x_InitButterworth(&state->iir, source_rate);
+  state->phase_coefficients =
+      (source_rate == 44100U) ?
+          spdif_butterworth_phase_coefficients_176k4 :
+          spdif_butterworth_phase_coefficients_192k;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
   memset(state->noise_error_left, 0, sizeof(state->noise_error_left));

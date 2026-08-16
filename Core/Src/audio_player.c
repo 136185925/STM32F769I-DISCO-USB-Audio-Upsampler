@@ -617,6 +617,11 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   if (player_output == USB_AUDIO_OUTPUT_SPDIF)
   {
     const USB_AudioSpdifMode spdif_mode = USB_Audio_GetSpdifMode();
+    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2)
+    {
+      SPDIF_HybridUpsampler4x_InitButterworth(
+          &player_spdif_hybrid_upsampler, sample_rate);
+    }
     player_spdif_upsample =
         ((spdif_mode != USB_AUDIO_SPDIF_NATIVE) &&
          (bits_per_sample == 16U) &&
@@ -639,7 +644,9 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
          (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID)) ? 1U : 0U;
     player_spdif_hybrid_ns2 =
         ((player_spdif_upsample != 0U) &&
-         (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2)) ? 1U : 0U;
+         ((spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2) ||
+          (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2))) ?
+        1U : 0U;
     return (SPDIF_TX_Init(player_spdif_upsample != 0U ?
                           sample_rate * PLAYER_SPDIF_FACTOR : sample_rate,
                           bits_per_sample)
