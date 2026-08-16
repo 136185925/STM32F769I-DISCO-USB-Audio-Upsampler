@@ -147,7 +147,7 @@ Remove the 32tap FIR phase correction, because it may introduce pre-echo
 ## 4X BES MIN
 Replace the 14th-order Butterworth with a 20th-order Bessel IIR to trade computational cost for better phase response and no pre-echo, -3db occurs around 18kHz
 
-## BES OPEN
+## 4X BES OPEN
 Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，closer to the NOS state
 
 ## Phase and Clock Jitter
