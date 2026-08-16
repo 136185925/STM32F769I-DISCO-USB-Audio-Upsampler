@@ -35,6 +35,8 @@ The selected setting is saved to the RTC backup register and remains retained af
 | 4X IIR | 14th-order IIR | −1 dB | Four-phase TPDF | Nonlinear phase | Medium-high |
 | HYBRID | 14th-order IIR + 32-tap FIR | −1 dB | Four-phase TPDF | Approximately fixed group delay | Highest |
 | HYBRID NS2 | 14th-order IIR + 32-tap FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
+| BTR NS2 | 14th-order Butterworth IIR + 32-tap soft FIR + 2nd order Noise shaping | −1 dB | Four-phase TPDF + NS2 | Approximately fixed group delay | Highest |
+
 ---
 
 ## NATIVE
@@ -134,6 +136,8 @@ Does not clear the IIR/FIR filter history, so it will not restart the entire fil
 
 PCM → −1 dB → 4×zero insertion → 14th-order Chebyshev-I IIR → 32-tap FIR phase equalization → four-phase TPDF + 2nd order Noise shaping → 16-bit quantization → S/PDIF
 
+## 4X BTR NS2
+Replace the Chebyshev filter with a less aggressive butterworth filter，raise the passband cutoff frequency at 44.1kHz from 20k to 22k，at 48kHz from 20k to 24k，reduce phase correction by 35%，to obtain richer musical information
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline,  the filtering algorithm will not change the S/PDIF clock edges.
