@@ -234,6 +234,10 @@ void USB_Audio_CreateResources(void)
   {
     const uint32_t saved_mode = saved_spdif & 0xFFU;
     if (saved_mode ==
+        (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5)
+      usb_audio_spdif_mode =
+          USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5;
+    else if (saved_mode ==
         (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2)
       usb_audio_spdif_mode =
           USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2;
@@ -366,7 +370,9 @@ USB_AudioHostMode USB_Audio_GetHostMode(void)
 void USB_Audio_RequestSpdifMode(USB_AudioSpdifMode mode)
 {
   USB_AudioSpdifMode requested = USB_AUDIO_SPDIF_NATIVE;
-  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2)
+  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5)
+    requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5;
+  else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2;
   else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS2)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS2;
@@ -531,7 +537,14 @@ static uint8_t USB_Audio_ConfigureHardware(uint32_t sample_rate)
     const uint32_t output_rate =
         upsample != 0U ? sample_rate * USB_AUDIO_SPDIF_FACTOR : sample_rate;
     SPDIF_IirUpsampler4x_Init(&usb_audio_spdif_iir_upsampler, sample_rate);
-    if (usb_audio_spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2)
+    if (usb_audio_spdif_mode ==
+        USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5)
+    {
+      SPDIF_MinimumPhaseUpsampler4x_InitBesselNoiseShaped5(
+          &usb_audio_spdif_hybrid_upsampler, sample_rate);
+    }
+    else if (usb_audio_spdif_mode ==
+             USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2)
     {
       SPDIF_MinimumPhaseUpsampler4x_InitBesselOpen(
           &usb_audio_spdif_hybrid_upsampler, sample_rate);
@@ -654,6 +667,13 @@ static uint32_t USB_Audio_FillDmaHalf(uint8_t half)
         {
           SPDIF_IirUpsampler4x_Process(&usb_audio_spdif_iir_upsampler,
               source.left, source.right, interpolated);
+        }
+        else if (usb_audio_prepared_spdif_mode ==
+                 USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5)
+        {
+          SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped5(
+              &usb_audio_spdif_hybrid_upsampler, source.left, source.right,
+              interpolated);
         }
         else if ((usb_audio_prepared_spdif_mode ==
                   USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2) ||

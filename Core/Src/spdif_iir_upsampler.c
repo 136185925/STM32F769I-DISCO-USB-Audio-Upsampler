@@ -155,6 +155,24 @@ static const float spdif_bessel_open_coefficients
     -0.437956038862f, -0.645770405442f }
 };
 
+/* Fifth-order minimum-integrated-noise NTFs. The unit-circle zero angles are
+ * the five-point Gauss-Legendre nodes scaled across 0..20 kHz. Coefficient
+ * zero is implicit (one); these are the five previous-error feedback taps.
+ * Separate clock-family sets keep the acoustic optimization band fixed. */
+static const float spdif_noise_shaper5_coefficients_176k4
+    [SPDIF_OPT_NOISE_SHAPER_ORDER] =
+{
+  -4.45219631032f, 8.41508536432f, -8.41508536432f,
+  4.45219631032f, -1.0f
+};
+
+static const float spdif_noise_shaper5_coefficients_192k
+    [SPDIF_OPT_NOISE_SHAPER_ORDER] =
+{
+  -4.53550663875f, 8.64850715592f, -8.64850715592f,
+  4.53550663875f, -1.0f
+};
+
 /* 32-tap causal phase equalizers fitted offline against each IIR response.
  * They approximate exp(-j*44*w) / exp(j*arg(H_iir)) in the 0..18 kHz band.
  * This revision halves the real-time FIR load so a complete 192 kHz DMA half
@@ -279,6 +297,46 @@ static int16_t SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
       (int32_t)(quantizer_input + 0.5f) :
       (int32_t)(quantizer_input - 0.5f);
   error[1] = error[0];
+  error[0] = (float)rounded - shaped;
+  return (int16_t)rounded;
+}
+
+static int16_t SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+    float value, uint32_t *dither_state,
+    float error[SPDIF_OPT_NOISE_SHAPER_ORDER],
+    const float coefficients[SPDIF_OPT_NOISE_SHAPER_ORDER])
+{
+  float shaped = value;
+  int32_t rounded;
+
+  /* y=x+N(z)e with N[0]=1. Feeding the remaining NTF coefficients back
+   * around the quantizer shapes both TPDF and rounding residue. This is an
+   * FIR error path, so bounded errors cannot create recursive instability. */
+  for (uint32_t tap = 0U; tap < SPDIF_OPT_NOISE_SHAPER_ORDER; ++tap)
+  {
+    shaped += coefficients[tap] * error[tap];
+  }
+  const float quantizer_input =
+      shaped + SPDIF_IirUpsampler4x_Tpdf(dither_state);
+
+  if (quantizer_input >= 32767.0f)
+  {
+    memset(error, 0, sizeof(float) * SPDIF_OPT_NOISE_SHAPER_ORDER);
+    return 32767;
+  }
+  if (quantizer_input <= -32768.0f)
+  {
+    memset(error, 0, sizeof(float) * SPDIF_OPT_NOISE_SHAPER_ORDER);
+    return -32768;
+  }
+
+  rounded = (quantizer_input >= 0.0f) ?
+      (int32_t)(quantizer_input + 0.5f) :
+      (int32_t)(quantizer_input - 0.5f);
+  for (uint32_t tap = SPDIF_OPT_NOISE_SHAPER_ORDER - 1U; tap > 0U; --tap)
+  {
+    error[tap] = error[tap - 1U];
+  }
   error[0] = (float)rounded - shaped;
   return (int16_t)rounded;
 }
@@ -409,6 +467,7 @@ void SPDIF_HybridUpsampler4x_Init(SPDIF_HybridUpsampler4x *state,
   state->phase_coefficients =
       (source_rate == 44100U) ? spdif_phase_coefficients_176k4 :
                                 spdif_phase_coefficients_192k;
+  state->noise_shaping_coefficients = NULL;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
   memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
@@ -425,6 +484,7 @@ void SPDIF_HybridUpsampler4x_InitButterworth(
       (source_rate == 44100U) ?
           spdif_butterworth_phase_coefficients_176k4 :
           spdif_butterworth_phase_coefficients_192k;
+  state->noise_shaping_coefficients = NULL;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
   memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
@@ -439,6 +499,7 @@ void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
   if (state == NULL) return;
   SPDIF_IirUpsampler4x_InitBessel(&state->iir);
   state->phase_coefficients = NULL;
+  state->noise_shaping_coefficients = NULL;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
   memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
@@ -453,11 +514,23 @@ void SPDIF_MinimumPhaseUpsampler4x_InitBesselOpen(
   if (state == NULL) return;
   SPDIF_IirUpsampler4x_InitBesselOpen(&state->iir);
   state->phase_coefficients = NULL;
+  state->noise_shaping_coefficients = NULL;
   memset(state->left_history, 0, sizeof(state->left_history));
   memset(state->right_history, 0, sizeof(state->right_history));
   memset(state->noise_error_left, 0, sizeof(state->noise_error_left));
   memset(state->noise_error_right, 0, sizeof(state->noise_error_right));
   state->write_index = 0U;
+}
+
+void SPDIF_MinimumPhaseUpsampler4x_InitBesselNoiseShaped5(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate)
+{
+  SPDIF_MinimumPhaseUpsampler4x_InitBessel(state, source_rate);
+  if (state == NULL) return;
+  state->noise_shaping_coefficients =
+      (source_rate == 44100U) ?
+          spdif_noise_shaper5_coefficients_176k4 :
+          spdif_noise_shaper5_coefficients_192k;
 }
 
 static void SPDIF_HybridUpsampler4x_ProcessInternal(
@@ -553,5 +626,24 @@ void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped2(
         SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
             filtered[phase * 2U + 1U], &state->iir.dither_right,
             state->noise_error_right);
+  }
+}
+
+void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped5(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U])
+{
+  float filtered[SPDIF_UPSAMPLER_FACTOR * 2U];
+  SPDIF_IirUpsampler4x_ProcessFloat(&state->iir, left, right, filtered);
+  for (uint32_t phase = 0U; phase < SPDIF_UPSAMPLER_FACTOR; ++phase)
+  {
+    output[phase * 2U] =
+        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+            filtered[phase * 2U], &state->iir.dither_left,
+            state->noise_error_left, state->noise_shaping_coefficients);
+    output[phase * 2U + 1U] =
+        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+            filtered[phase * 2U + 1U], &state->iir.dither_right,
+            state->noise_error_right, state->noise_shaping_coefficients);
   }
 }

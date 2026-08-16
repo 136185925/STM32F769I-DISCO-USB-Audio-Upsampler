@@ -1517,6 +1517,9 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             const bool besselOpenNs2 =
                 audio.spdif_mode ==
                     USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2;
+            const bool besselMinNs5 =
+                audio.spdif_mode ==
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5;
             drawText("S/PDIF MODE", 122,
                      static_cast<int16_t>(378 - offset), 1, muted,
                      contentDirty);
@@ -1528,7 +1531,7 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             fillRounded(220, modeY1, 96, 29, 8,
                         (repeat || exact || headroom || tpdf || iir || hybrid ||
                          hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
-                         besselMinNs2 || besselOpenNs2) ?
+                         besselMinNs2 || besselOpenNs2 || besselMinNs5) ?
                             track : rgb(40, 113, 132), contentDirty);
             fillRounded(320, modeY1, 96, 29, 8,
                         repeat ? rgb(35, 125, 103) : track, contentDirty);
@@ -1538,28 +1541,31 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                         headroom ? rgb(160, 105, 38) : track, contentDirty);
             fillRounded(620, modeY1, 96, 29, 8,
                         tpdf ? rgb(153, 62, 128) : track, contentDirty);
-            fillRounded(220, modeY2, 68, 29, 8,
+            fillRounded(220, modeY2, 59, 29, 8,
                         iir ? rgb(46, 105, 154) : track, contentDirty);
-            fillRounded(292, modeY2, 68, 29, 8,
+            fillRounded(283, modeY2, 59, 29, 8,
                         hybrid ? rgb(45, 126, 142) : track, contentDirty);
-            fillRounded(364, modeY2, 68, 29, 8,
+            fillRounded(346, modeY2, 59, 29, 8,
                         hybridNs2 ? rgb(42, 145, 114) : track, contentDirty);
-            fillRounded(436, modeY2, 68, 29, 8,
+            fillRounded(409, modeY2, 59, 29, 8,
                         butterworthNs2 ? rgb(113, 91, 170) : track,
                         contentDirty);
-            fillRounded(508, modeY2, 68, 29, 8,
+            fillRounded(472, modeY2, 59, 29, 8,
                         butterworthMinNs2 ? rgb(169, 92, 70) : track,
                         contentDirty);
-            fillRounded(580, modeY2, 68, 29, 8,
+            fillRounded(535, modeY2, 59, 29, 8,
                         besselMinNs2 ? rgb(54, 137, 155) : track,
                         contentDirty);
-            fillRounded(652, modeY2, 68, 29, 8,
+            fillRounded(598, modeY2, 59, 29, 8,
                         besselOpenNs2 ? rgb(53, 157, 132) : track,
+                        contentDirty);
+            fillRounded(661, modeY2, 59, 29, 8,
+                        besselMinNs5 ? rgb(143, 91, 174) : track,
                         contentDirty);
             drawText("NATIVE", 250, static_cast<int16_t>(376 - offset), 1,
                      (repeat || exact || headroom || tpdf || iir || hybrid ||
                       hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
-                      besselMinNs2 || besselOpenNs2) ?
+                      besselMinNs2 || besselOpenNs2 || besselMinNs5) ?
                          muted : white, contentDirty);
             drawText("4X HOLD", 347, static_cast<int16_t>(376 - offset), 1,
                      repeat ? white : muted, contentDirty);
@@ -1569,20 +1575,22 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                      headroom ? white : muted, contentDirty);
             drawText("4X TPDF", 647, static_cast<int16_t>(376 - offset), 1,
                      tpdf ? white : muted, contentDirty);
-            drawText("4X IIR", 236, static_cast<int16_t>(409 - offset), 1,
+            drawText("4X IIR", 231, static_cast<int16_t>(409 - offset), 1,
                      iir ? white : muted, contentDirty);
-            drawText("HYBRID", 308, static_cast<int16_t>(409 - offset), 1,
+            drawText("HYBRID", 294, static_cast<int16_t>(409 - offset), 1,
                      hybrid ? white : muted, contentDirty);
-            drawText("HYB NS2", 377, static_cast<int16_t>(409 - offset), 1,
+            drawText("HYB NS2", 355, static_cast<int16_t>(409 - offset), 1,
                      hybridNs2 ? white : muted, contentDirty);
-            drawText("BTR NS2", 449, static_cast<int16_t>(409 - offset), 1,
+            drawText("BTR NS2", 418, static_cast<int16_t>(409 - offset), 1,
                      butterworthNs2 ? white : muted, contentDirty);
-            drawText("BTR MIN", 521, static_cast<int16_t>(409 - offset), 1,
+            drawText("BTR MIN", 481, static_cast<int16_t>(409 - offset), 1,
                      butterworthMinNs2 ? white : muted, contentDirty);
-            drawText("BES MIN", 593, static_cast<int16_t>(409 - offset), 1,
+            drawText("BES MIN", 544, static_cast<int16_t>(409 - offset), 1,
                      besselMinNs2 ? white : muted, contentDirty);
-            drawText("BES OPEN", 662, static_cast<int16_t>(409 - offset), 1,
+            drawText("BES OPEN", 604, static_cast<int16_t>(409 - offset), 1,
                      besselOpenNs2 ? white : muted, contentDirty);
+            drawText("BES NS5", 670, static_cast<int16_t>(409 - offset), 1,
+                     besselMinNs5 ? white : muted, contentDirty);
         } else {
             char gainText[5];
             formatPercent(audio.volume, 100U, gainText);
@@ -2864,40 +2872,45 @@ void MainView::handleTrackingClick(const ClickEvent& event)
             } else if (contentPressY >= 399 && contentPressY <= 435 &&
                        contentReleaseY >= 399 &&
                        contentReleaseY <= 435) {
-                if (pressX >= 220 && pressX <= 289 &&
-                    x >= 220 && x <= 289) {
+                if (pressX >= 220 && pressX <= 281 &&
+                    x >= 220 && x <= 281) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_IIR);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 290 && pressX <= 361 &&
-                           x >= 290 && x <= 361) {
+                } else if (pressX >= 282 && pressX <= 344 &&
+                           x >= 282 && x <= 344) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 362 && pressX <= 433 &&
-                           x >= 362 && x <= 433) {
+                } else if (pressX >= 345 && pressX <= 407 &&
+                           x >= 345 && x <= 407) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_HYBRID_NS2);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 434 && pressX <= 505 &&
-                           x >= 434 && x <= 505) {
+                } else if (pressX >= 408 && pressX <= 470 &&
+                           x >= 408 && x <= 470) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_NS2);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 506 && pressX <= 577 &&
-                           x >= 506 && x <= 577) {
+                } else if (pressX >= 471 && pressX <= 533 &&
+                           x >= 471 && x <= 533) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BUTTERWORTH_MINPHASE_NS2);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 578 && pressX <= 649 &&
-                           x >= 578 && x <= 649) {
+                } else if (pressX >= 534 && pressX <= 596 &&
+                           x >= 534 && x <= 596) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS2);
                     appPanel.invalidateSettings();
-                } else if (pressX >= 650 && pressX <= 720 &&
-                           x >= 650 && x <= 720) {
+                } else if (pressX >= 597 && pressX <= 659 &&
+                           x >= 597 && x <= 659) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_OPEN_NS2);
+                    appPanel.invalidateSettings();
+                } else if (pressX >= 660 && pressX <= 720 &&
+                           x >= 660 && x <= 720) {
+                    USB_Audio_RequestSpdifMode(
+                        USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5);
                     appPanel.invalidateSettings();
                 }
             }

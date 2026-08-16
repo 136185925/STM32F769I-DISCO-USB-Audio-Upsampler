@@ -14,6 +14,7 @@ extern "C" {
 #define SPDIF_IIR_UPSAMPLER_MAX_STAGES  SPDIF_BESSEL_UPSAMPLER_STAGES
 #define SPDIF_IIR_UPSAMPLER_TAIL_FRAMES 256U
 #define SPDIF_HYBRID_PHASE_TAPS          32U
+#define SPDIF_OPT_NOISE_SHAPER_ORDER     5U
 #define SPDIF_HYBRID_PHASE_DELAY_SAMPLES 44U
 #define SPDIF_BUTTERWORTH_PHASE_DELAY_SAMPLES 36U
 #define SPDIF_HYBRID_UPSAMPLER_TAIL_FRAMES \
@@ -38,9 +39,10 @@ typedef struct
   float left_history[SPDIF_HYBRID_PHASE_TAPS * 2U];
   float right_history[SPDIF_HYBRID_PHASE_TAPS * 2U];
   const float *phase_coefficients;
-  /* Previous total quantization errors for optional (1-z^-1)^2 shaping. */
-  float noise_error_left[2];
-  float noise_error_right[2];
+  const float *noise_shaping_coefficients;
+  /* Previous total quantization errors for second- or fifth-order shaping. */
+  float noise_error_left[SPDIF_OPT_NOISE_SHAPER_ORDER];
+  float noise_error_right[SPDIF_OPT_NOISE_SHAPER_ORDER];
   uint8_t write_index;
 } SPDIF_HybridUpsampler4x;
 
@@ -64,6 +66,8 @@ void SPDIF_MinimumPhaseUpsampler4x_InitBessel(
     SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_MinimumPhaseUpsampler4x_InitBesselOpen(
     SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
+void SPDIF_MinimumPhaseUpsampler4x_InitBesselNoiseShaped5(
+    SPDIF_HybridUpsampler4x *state, uint32_t source_rate);
 void SPDIF_HybridUpsampler4x_Reset(SPDIF_HybridUpsampler4x *state);
 
 /* Run the same IIR interpolator and final TPDF as 4X IIR, with a 32-tap FIR
@@ -84,6 +88,13 @@ void SPDIF_HybridUpsampler4x_ProcessNoiseShaped2(
  * supports the selected Butterworth or Bessel coefficients and keeps the
  * same TPDF plus second-order error feedback as HYBRID NS2. */
 void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped2(
+    SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
+    int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
+
+/* BES MIN with an optimized fifth-order FIR error-feedback NTF. Its five
+ * unit-circle zeros minimize integrated quantization noise over 0..20 kHz;
+ * the finite history cannot recursively diverge, and overload clears it. */
+void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped5(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 
