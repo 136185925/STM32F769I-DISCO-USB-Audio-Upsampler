@@ -48,7 +48,7 @@ No upsampling,  gain processing,  or dithering is performed.
 Data is sent to S/PDIF at the original sample rate:
 - 44.1 kHz input → 44.1 kHz output
 - 48 kHz input → 48 kHz output
-This mode has the lowest CPU usage and makes the fewest modifications to the original PCM.
+This mode has the lowest CPU usage and makes the NO modification to the original PCM.
 
 ## 4X HOLD
 Using the Zero-Order Hold method,  output each input sample point four consecutive times.
