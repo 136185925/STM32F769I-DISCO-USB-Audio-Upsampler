@@ -301,7 +301,14 @@ static int16_t SPDIF_HybridUpsampler4x_QuantizeNoiseShaped2(
   return (int16_t)rounded;
 }
 
-static int16_t SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+const float *SPDIF_NoiseShaper5_GetCoefficients(uint32_t output_rate)
+{
+  return (output_rate == 176400U) ?
+      spdif_noise_shaper5_coefficients_176k4 :
+      spdif_noise_shaper5_coefficients_192k;
+}
+
+int16_t SPDIF_NoiseShaper5_Quantize(
     float value, uint32_t *dither_state,
     float error[SPDIF_OPT_NOISE_SHAPER_ORDER],
     const float coefficients[SPDIF_OPT_NOISE_SHAPER_ORDER])
@@ -638,11 +645,11 @@ void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped5(
   for (uint32_t phase = 0U; phase < SPDIF_UPSAMPLER_FACTOR; ++phase)
   {
     output[phase * 2U] =
-        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+        SPDIF_NoiseShaper5_Quantize(
             filtered[phase * 2U], &state->iir.dither_left,
             state->noise_error_left, state->noise_shaping_coefficients);
     output[phase * 2U + 1U] =
-        SPDIF_HybridUpsampler4x_QuantizeNoiseShaped5(
+        SPDIF_NoiseShaper5_Quantize(
             filtered[phase * 2U + 1U], &state->iir.dither_right,
             state->noise_error_right, state->noise_shaping_coefficients);
   }

@@ -52,7 +52,7 @@ const int16_t ICON_X[4] = {70, 250, 430, 610};
 const int16_t ICON_Y[2] = {112, 272};
 const int16_t SETTINGS_VIEW_TOP = 112;
 const int16_t SETTINGS_VIEW_BOTTOM = 447;
-const int16_t SETTINGS_CONTENT_BOTTOM = 688;
+const int16_t SETTINGS_CONTENT_BOTTOM = 721;
 const int16_t SETTINGS_SCROLL_MAX =
     SETTINGS_CONTENT_BOTTOM - SETTINGS_VIEW_BOTTOM;
 const int16_t SETTINGS_BUFFER_SLIDER_X = 220;
@@ -897,7 +897,7 @@ void AppPanelWidget::invalidateSettingsGain()
 
 void AppPanelWidget::invalidateSettingsStartBuffer()
 {
-    Rect bufferArea(115, static_cast<int16_t>(581 - settingsScroll), 570, 88);
+    Rect bufferArea(115, static_cast<int16_t>(598 - settingsScroll), 570, 104);
     invalidateRect(bufferArea);
 }
 
@@ -1448,7 +1448,7 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
 
         /* USB Audio card. Controls are spaced vertically so every row keeps
            a distinct touch target after scrolling. */
-        fillRounded(35, static_cast<int16_t>(220 - offset), 730, 280, 17,
+        fillRounded(35, static_cast<int16_t>(220 - offset), 730, 313, 17,
                     surface, contentDirty);
         fillRounded(53, static_cast<int16_t>(238 - offset), 52, 52, 13,
                     rgb(92, 58, 123), contentDirty);
@@ -1520,6 +1520,9 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             const bool besselMinNs5 =
                 audio.spdif_mode ==
                     USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5;
+            const bool firMinNs5 =
+                audio.spdif_mode ==
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5;
             drawText("S/PDIF MODE", 122,
                      static_cast<int16_t>(378 - offset), 1, muted,
                      contentDirty);
@@ -1528,10 +1531,12 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                      contentDirty);
             const int16_t modeY1 = static_cast<int16_t>(367 - offset);
             const int16_t modeY2 = static_cast<int16_t>(400 - offset);
+            const int16_t modeY3 = static_cast<int16_t>(433 - offset);
             fillRounded(220, modeY1, 96, 29, 8,
                         (repeat || exact || headroom || tpdf || iir || hybrid ||
                          hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
-                         besselMinNs2 || besselOpenNs2 || besselMinNs5) ?
+                         besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
+                         firMinNs5) ?
                             track : rgb(40, 113, 132), contentDirty);
             fillRounded(320, modeY1, 96, 29, 8,
                         repeat ? rgb(35, 125, 103) : track, contentDirty);
@@ -1562,10 +1567,14 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             fillRounded(661, modeY2, 59, 29, 8,
                         besselMinNs5 ? rgb(143, 91, 174) : track,
                         contentDirty);
+            fillRounded(220, modeY3, 118, 29, 8,
+                        firMinNs5 ? rgb(184, 112, 52) : track,
+                        contentDirty);
             drawText("NATIVE", 250, static_cast<int16_t>(376 - offset), 1,
                      (repeat || exact || headroom || tpdf || iir || hybrid ||
                       hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
-                      besselMinNs2 || besselOpenNs2 || besselMinNs5) ?
+                      besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
+                      firMinNs5) ?
                          muted : white, contentDirty);
             drawText("4X HOLD", 347, static_cast<int16_t>(376 - offset), 1,
                      repeat ? white : muted, contentDirty);
@@ -1591,6 +1600,11 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                      besselOpenNs2 ? white : muted, contentDirty);
             drawText("BES NS5", 670, static_cast<int16_t>(409 - offset), 1,
                      besselMinNs5 ? white : muted, contentDirty);
+            drawText("FIR MIN", 258, static_cast<int16_t>(442 - offset), 1,
+                     firMinNs5 ? white : muted, contentDirty);
+            drawText("KAISER 90DB / POLYPHASE / NS5", 356,
+                     static_cast<int16_t>(442 - offset), 1, muted,
+                     contentDirty);
         } else {
             char gainText[5];
             formatPercent(audio.volume, 100U, gainText);
@@ -1662,11 +1676,11 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             statusText = "USB STORAGE ERROR - RETRY";
             statusColor = red;
         }
-        fillRounded(55, static_cast<int16_t>(447 - offset), 690, 34, 11,
+        fillRounded(55, static_cast<int16_t>(480 - offset), 690, 34, 11,
                     rgb(14, 23, 37), contentDirty);
-        fillRounded(72, static_cast<int16_t>(458 - offset), 12, 12, 6,
+        fillRounded(72, static_cast<int16_t>(491 - offset), 12, 12, 6,
                     statusColor, contentDirty);
-        drawText(statusText, 98, static_cast<int16_t>(454 - offset), 2,
+        drawText(statusText, 98, static_cast<int16_t>(487 - offset), 2,
                  statusColor, contentDirty);
         const bool usbConfigured =
             audio.configured != 0U || msc.configured != 0U;
@@ -1674,7 +1688,7 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             audio.high_speed != 0U : msc.high_speed != 0U;
         if (usbConfigured) {
             drawText(usbHighSpeed ? "HIGH SPEED" : "FULL SPEED",
-                     646, static_cast<int16_t>(459 - offset), 1,
+                     646, static_cast<int16_t>(492 - offset), 1,
                      usbHighSpeed ? green : amber, contentDirty);
         }
 
@@ -1706,24 +1720,24 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             cursor = appendText(cursor, " BLOCKS");
             *cursor = 0;
         }
-        drawText(audioStats, 58, static_cast<int16_t>(499 - offset), 1,
+        drawText(audioStats, 58, static_cast<int16_t>(532 - offset), 1,
                  white, contentDirty);
-        drawText(xrunStats, 570, static_cast<int16_t>(499 - offset), 1,
+        drawText(xrunStats, 570, static_cast<int16_t>(532 - offset), 1,
                  (audio.underruns != 0U || audio.overruns != 0U) ?
                      amber : white, contentDirty);
 
         /* Start-buffer card. The setting is deliberately below the main USB
            controls so it can use a wide, finger-friendly slider. */
-        fillRounded(35, static_cast<int16_t>(545 - offset), 730, 143, 17,
+        fillRounded(35, static_cast<int16_t>(578 - offset), 730, 143, 17,
                     surface, contentDirty);
-        fillRounded(53, static_cast<int16_t>(563 - offset), 52, 52, 13,
+        fillRounded(53, static_cast<int16_t>(596 - offset), 52, 52, 13,
                     rgb(38, 103, 91), contentDirty);
-        drawText("BF", 63, static_cast<int16_t>(580 - offset), 2, green,
+        drawText("BF", 63, static_cast<int16_t>(613 - offset), 2, green,
                  contentDirty);
         drawText("USB START BUFFER", 122,
-                 static_cast<int16_t>(559 - offset), 2, white, contentDirty);
+                 static_cast<int16_t>(592 - offset), 2, white, contentDirty);
         drawText("MORE FRAMES = MORE START LATENCY AND GAP HEADROOM", 122,
-                 static_cast<int16_t>(585 - offset), 1, muted, contentDirty);
+                 static_cast<int16_t>(618 - offset), 1, muted, contentDirty);
 
         char bufferValue[28];
         cursor = appendUnsigned(bufferValue, audio.start_frames);
@@ -1738,9 +1752,9 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
         *cursor = 0;
         drawText(bufferValue,
                  static_cast<int16_t>(735 - textLength(bufferValue) * 6),
-                 static_cast<int16_t>(565 - offset), 1, green, contentDirty);
+                 static_cast<int16_t>(598 - offset), 1, green, contentDirty);
 
-        const int16_t sliderY = static_cast<int16_t>(618 - offset);
+        const int16_t sliderY = static_cast<int16_t>(651 - offset);
         fillRounded(SETTINGS_BUFFER_SLIDER_X, sliderY,
                     SETTINGS_BUFFER_SLIDER_WIDTH, 14, 7, track, contentDirty);
         const int16_t knobX = settingsStartFramesToX(audio.start_frames);
@@ -1754,15 +1768,15 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                     static_cast<int16_t>(sliderY - 5), 22, 24, 11, white,
                     contentDirty);
         drawText("6144", SETTINGS_BUFFER_SLIDER_X,
-                 static_cast<int16_t>(641 - offset), 1, muted, contentDirty);
+                 static_cast<int16_t>(674 - offset), 1, muted, contentDirty);
         drawText("30720",
                  static_cast<int16_t>(SETTINGS_BUFFER_SLIDER_X +
                                       SETTINGS_BUFFER_SLIDER_WIDTH - 36),
-                 static_cast<int16_t>(641 - offset), 1, muted, contentDirty);
+                 static_cast<int16_t>(674 - offset), 1, muted, contentDirty);
         drawText(audio.streaming != 0U ?
                  "SAVED - APPLIES AT NEXT START OR REBUFFER" :
                  "ACTIVE FOR THE NEXT DMA START",
-                 220, static_cast<int16_t>(666 - offset), 1,
+                 220, static_cast<int16_t>(699 - offset), 1,
                  audio.streaming != 0U ? amber : green, contentDirty);
     }
 
@@ -2730,7 +2744,7 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                 appPanel.invalidateSettingsGain();
                 return;
             }
-            if (contentPressY >= 570 && contentPressY <= 618) {
+            if (contentPressY >= 636 && contentPressY <= 684) {
                 USB_Audio_RequestStartFrames(settingsStartFramesFromX(x));
                 appPanel.invalidateSettingsStartBuffer();
                 return;
@@ -2869,9 +2883,9 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_TPDF);
                     appPanel.invalidateSettings();
                 }
-            } else if (contentPressY >= 399 && contentPressY <= 435 &&
+            } else if (contentPressY >= 399 && contentPressY <= 431 &&
                        contentReleaseY >= 399 &&
-                       contentReleaseY <= 435) {
+                       contentReleaseY <= 431) {
                 if (pressX >= 220 && pressX <= 281 &&
                     x >= 220 && x <= 281) {
                     USB_Audio_RequestSpdifMode(
@@ -2913,6 +2927,14 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_BESSEL_MINPHASE_NS5);
                     appPanel.invalidateSettings();
                 }
+            } else if (contentPressY >= 432 && contentPressY <= 468 &&
+                       contentReleaseY >= 432 &&
+                       contentReleaseY <= 468 &&
+                       pressX >= 220 && pressX <= 340 &&
+                       x >= 220 && x <= 340) {
+                USB_Audio_RequestSpdifMode(
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5);
+                appPanel.invalidateSettings();
             }
         } else if (selectedApp == 13U && x >= 235 && x <= 565 &&
                    y >= 335 && y <= 417 && pressX >= 235 && pressX <= 565 &&
@@ -3002,7 +3024,7 @@ void MainView::handleTrackingDrag(const DragEvent& event)
             }
             if (pressY >= SETTINGS_VIEW_TOP &&
                 pressY <= SETTINGS_VIEW_BOTTOM &&
-                contentPressY >= 603 && contentPressY <= 651) {
+                contentPressY >= 636 && contentPressY <= 684) {
                 if (deltaX <= -5 || deltaX >= 5 ||
                     deltaY <= -8 || deltaY >= 8) {
                     dragging = true;

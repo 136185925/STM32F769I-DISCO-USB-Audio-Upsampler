@@ -98,6 +98,13 @@ void SPDIF_MinimumPhaseUpsampler4x_ProcessNoiseShaped5(
     SPDIF_HybridUpsampler4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_UPSAMPLER_FACTOR * 2U]);
 
+/* Shared final-stage NS5 primitive used by both Bessel and FIR MIN paths. */
+const float *SPDIF_NoiseShaper5_GetCoefficients(uint32_t output_rate);
+int16_t SPDIF_NoiseShaper5_Quantize(
+    float value, uint32_t *dither_state,
+    float error[SPDIF_OPT_NOISE_SHAPER_ORDER],
+    const float coefficients[SPDIF_OPT_NOISE_SHAPER_ORDER]);
+
 #ifdef __cplusplus
 }
 #endif
