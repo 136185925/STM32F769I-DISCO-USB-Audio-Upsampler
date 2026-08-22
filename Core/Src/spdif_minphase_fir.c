@@ -1,8 +1,11 @@
 #include "spdif_minphase_fir.h"
 
+#include "spdif_wls_fir_coefficients.h"
+
 #include <string.h>
 
-#define SPDIF_MINPHASE_FIR_INPUT_GAIN 3.36558057f
+#define SPDIF_MINPHASE_FIR_KAISER_INPUT_GAIN 3.36558057f
+#define SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN    3.86420352f
 #define SPDIF_MINPHASE_FIR_DITHER_LEFT_SEED  0x9E3779B9U
 #define SPDIF_MINPHASE_FIR_DITHER_RIGHT_SEED 0x243F6A88U
 
@@ -158,6 +161,19 @@ void SPDIF_MinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
   }
   state->noise_shaping_coefficients =
       SPDIF_NoiseShaper5_GetCoefficients(source_rate * 4U);
+  state->input_gain = SPDIF_MINPHASE_FIR_KAISER_INPUT_GAIN;
+  SPDIF_MinimumPhaseFir4x_Reset(state);
+}
+
+void SPDIF_WeightedMinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
+                                          uint32_t source_rate)
+{
+  if (state == NULL) return;
+  state->coefficients =
+      SPDIF_WlsFir4x_GetCoefficients(source_rate, &state->taps_per_phase);
+  state->noise_shaping_coefficients =
+      SPDIF_NoiseShaper5_GetCoefficients(source_rate * 4U);
+  state->input_gain = SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN;
   SPDIF_MinimumPhaseFir4x_Reset(state);
 }
 
@@ -167,8 +183,8 @@ void SPDIF_MinimumPhaseFir4x_Process(
 {
   const uint32_t taps = state->taps_per_phase;
   const uint32_t write = state->write_index;
-  const float left_input = (float)left * SPDIF_MINPHASE_FIR_INPUT_GAIN;
-  const float right_input = (float)right * SPDIF_MINPHASE_FIR_INPUT_GAIN;
+  const float left_input = (float)left * state->input_gain;
+  const float right_input = (float)right * state->input_gain;
 
   state->left_history[write] = left_input;
   state->left_history[write + taps] = left_input;

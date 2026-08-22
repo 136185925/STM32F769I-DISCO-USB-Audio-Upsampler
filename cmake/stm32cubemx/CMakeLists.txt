@@ -51,6 +51,7 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/spdif_upsampler.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/spdif_iir_upsampler.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/spdif_minphase_fir.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/spdif_wls_fir_coefficients.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../USB_DEVICE/App/usbd_desc.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../USB_DEVICE/App/usbd_storage.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../USB_DEVICE/Target/usbd_conf.c

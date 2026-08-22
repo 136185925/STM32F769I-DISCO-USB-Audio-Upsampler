@@ -1523,6 +1523,9 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             const bool firMinNs5 =
                 audio.spdif_mode ==
                     USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5;
+            const bool wlsMinNs5 =
+                audio.spdif_mode ==
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5;
             drawText("S/PDIF MODE", 122,
                      static_cast<int16_t>(378 - offset), 1, muted,
                      contentDirty);
@@ -1536,7 +1539,7 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                         (repeat || exact || headroom || tpdf || iir || hybrid ||
                          hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
                          besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
-                         firMinNs5) ?
+                         firMinNs5 || wlsMinNs5) ?
                             track : rgb(40, 113, 132), contentDirty);
             fillRounded(320, modeY1, 96, 29, 8,
                         repeat ? rgb(35, 125, 103) : track, contentDirty);
@@ -1570,11 +1573,14 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             fillRounded(220, modeY3, 118, 29, 8,
                         firMinNs5 ? rgb(184, 112, 52) : track,
                         contentDirty);
+            fillRounded(342, modeY3, 118, 29, 8,
+                        wlsMinNs5 ? rgb(47, 143, 124) : track,
+                        contentDirty);
             drawText("NATIVE", 250, static_cast<int16_t>(376 - offset), 1,
                      (repeat || exact || headroom || tpdf || iir || hybrid ||
                       hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
                       besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
-                      firMinNs5) ?
+                      firMinNs5 || wlsMinNs5) ?
                          muted : white, contentDirty);
             drawText("4X HOLD", 347, static_cast<int16_t>(376 - offset), 1,
                      repeat ? white : muted, contentDirty);
@@ -1602,7 +1608,13 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                      besselMinNs5 ? white : muted, contentDirty);
             drawText("FIR MIN", 258, static_cast<int16_t>(442 - offset), 1,
                      firMinNs5 ? white : muted, contentDirty);
-            drawText("KAISER 90DB / POLYPHASE / NS5", 356,
+            drawText("WLS MIN", 380, static_cast<int16_t>(442 - offset), 1,
+                     wlsMinNs5 ? white : muted, contentDirty);
+            const char *firDescription = wlsMinNs5 ?
+                "WLS 1:100 / -0.3DB / NS5" :
+                (firMinNs5 ? "KAISER / -1.5DB / NS5" :
+                             "MIN-PHASE POLYPHASE FIR");
+            drawText(firDescription, 478,
                      static_cast<int16_t>(442 - offset), 1, muted,
                      contentDirty);
         } else {
@@ -2929,12 +2941,18 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                 }
             } else if (contentPressY >= 432 && contentPressY <= 468 &&
                        contentReleaseY >= 432 &&
-                       contentReleaseY <= 468 &&
-                       pressX >= 220 && pressX <= 340 &&
-                       x >= 220 && x <= 340) {
-                USB_Audio_RequestSpdifMode(
-                    USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5);
-                appPanel.invalidateSettings();
+                       contentReleaseY <= 468) {
+                if (pressX >= 220 && pressX <= 340 &&
+                    x >= 220 && x <= 340) {
+                    USB_Audio_RequestSpdifMode(
+                        USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5);
+                    appPanel.invalidateSettings();
+                } else if (pressX >= 342 && pressX <= 462 &&
+                           x >= 342 && x <= 462) {
+                    USB_Audio_RequestSpdifMode(
+                        USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5);
+                    appPanel.invalidateSettings();
+                }
             }
         } else if (selectedApp == 13U && x >= 235 && x <= 565 &&
                    y >= 335 && y <= 417 && pressX >= 235 && pressX <= 565 &&
