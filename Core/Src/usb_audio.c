@@ -236,6 +236,10 @@ void USB_Audio_CreateResources(void)
   {
     const uint32_t saved_mode = saved_spdif & 0xFFU;
     if (saved_mode ==
+        (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
+      usb_audio_spdif_mode =
+          USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5;
+    else if (saved_mode ==
         (uint32_t)USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
       usb_audio_spdif_mode =
           USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5;
@@ -380,7 +384,9 @@ USB_AudioHostMode USB_Audio_GetHostMode(void)
 void USB_Audio_RequestSpdifMode(USB_AudioSpdifMode mode)
 {
   USB_AudioSpdifMode requested = USB_AUDIO_SPDIF_NATIVE;
-  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
+  if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
+    requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5;
+  else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5;
   else if (mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5)
     requested = USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5;
@@ -552,6 +558,12 @@ static uint8_t USB_Audio_ConfigureHardware(uint32_t sample_rate)
         upsample != 0U ? sample_rate * USB_AUDIO_SPDIF_FACTOR : sample_rate;
     SPDIF_IirUpsampler4x_Init(&usb_audio_spdif_iir_upsampler, sample_rate);
     if (usb_audio_spdif_mode ==
+        USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
+    {
+      SPDIF_WeightedLinearPhaseFir4x_Init(
+          &usb_audio_spdif_minphase_fir, sample_rate);
+    }
+    else if (usb_audio_spdif_mode ==
         USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
     {
       SPDIF_WeightedMinimumPhaseFir4x_Init(
@@ -697,7 +709,9 @@ static uint32_t USB_Audio_FillDmaHalf(uint8_t half)
         else if ((usb_audio_prepared_spdif_mode ==
                   USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5) ||
                  (usb_audio_prepared_spdif_mode ==
-                  USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5))
+                  USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5) ||
+                 (usb_audio_prepared_spdif_mode ==
+                  USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5))
         {
           SPDIF_MinimumPhaseFir4x_Process(&usb_audio_spdif_minphase_fir,
               source.left, source.right, interpolated);

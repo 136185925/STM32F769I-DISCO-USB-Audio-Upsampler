@@ -177,6 +177,19 @@ void SPDIF_WeightedMinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
   SPDIF_MinimumPhaseFir4x_Reset(state);
 }
 
+void SPDIF_WeightedLinearPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
+                                         uint32_t source_rate)
+{
+  if (state == NULL) return;
+  state->coefficients =
+      SPDIF_WlsLinearFir4x_GetCoefficients(source_rate,
+                                           &state->taps_per_phase);
+  state->noise_shaping_coefficients =
+      SPDIF_NoiseShaper5_GetCoefficients(source_rate * 4U);
+  state->input_gain = SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN;
+  SPDIF_MinimumPhaseFir4x_Reset(state);
+}
+
 void SPDIF_MinimumPhaseFir4x_Process(
     SPDIF_MinimumPhaseFir4x *state, int16_t left, int16_t right,
     int16_t output[SPDIF_MINPHASE_FIR_FACTOR * 2U])

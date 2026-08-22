@@ -37,6 +37,10 @@ void SPDIF_MinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
  * weights and -0.3 dB input headroom. The real-time polyphase core is shared. */
 void SPDIF_WeightedMinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
                                           uint32_t source_rate);
+/* Direct Type-II symmetric WLS prototype. This retains constant group delay
+ * and deliberately bypasses the real-cepstrum minimum-phase conversion. */
+void SPDIF_WeightedLinearPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
+                                         uint32_t source_rate);
 void SPDIF_MinimumPhaseFir4x_Reset(SPDIF_MinimumPhaseFir4x *state);
 void SPDIF_MinimumPhaseFir4x_Process(
     SPDIF_MinimumPhaseFir4x *state, int16_t left, int16_t right,

@@ -11,6 +11,8 @@ extern "C" {
  * family and writes the number of taps in each of the four phases. */
 const float *SPDIF_WlsFir4x_GetCoefficients(uint32_t source_rate,
                                             uint8_t *taps_per_phase);
+const float *SPDIF_WlsLinearFir4x_GetCoefficients(uint32_t source_rate,
+                                                  uint8_t *taps_per_phase);
 
 #ifdef __cplusplus
 }

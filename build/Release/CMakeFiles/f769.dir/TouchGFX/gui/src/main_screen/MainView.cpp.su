@@ -34,7 +34,7 @@ C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:269:6:
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:279:6:void {anonymous}::formatSignedTenths(int16_t, char*)	16	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:361:6:void {anonymous}::formatFileSize(uint32_t, char*)	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:407:6:bool {anonymous}::isWavEntry(const SD_StorageEntry&)	16	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2533:6:virtual void MainView::tearDownScreen()	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2542:6:virtual void MainView::tearDownScreen()	0	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:185:6:bool {anonymous}::formatCalculatorValue(double, char*)	64	static
 C:/TouchGFX/4.26.1/touchgfx/framework/include/mvp/View.hpp:36:7:virtual touchgfx::View<MainPresenter>::~View()	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:55:7:virtual AppPanelWidget::~AppPanelWidget()	8	static
@@ -42,7 +42,7 @@ C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hp
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:30:7:virtual DesktopBackgroundWidget::~DesktopBackgroundWidget()	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:135:13:virtual MainView::~MainView()	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/include/gui/main_screen/MainView.hpp:119:7:virtual TrackingTouchArea::~TrackingTouchArea()	8	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2525:6:virtual void MainView::setupScreen()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2534:6:virtual void MainView::setupScreen()	16	static
 C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/Drawable.hpp:121:18:virtual void touchgfx::Drawable::invalidateContent() const	0	static
 C:/TouchGFX/4.26.1/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:73:18:virtual void touchgfx::AbstractButton::executeAction()	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:74:10:uint32_t {anonymous}::settingsStartFramesFromX(int16_t)	0	static
@@ -56,7 +56,7 @@ C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:518:6:
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:548:6:void ProceduralWidget::fillRounded(int16_t, int16_t, int16_t, int16_t, int16_t, touchgfx::colortype, const touchgfx::Rect&) const	64	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:581:6:void ProceduralWidget::drawText(const char*, int16_t, int16_t, uint8_t, touchgfx::colortype, const touchgfx::Rect&) const	64	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:626:6:virtual void DesktopBackgroundWidget::draw(const touchgfx::Rect&) const	48	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2002:33:AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const::<lambda(int16_t, int16_t, const char*, const char*, const char*, uint32_t, uint32_t, touchgfx::colortype)>	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2011:33:AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const::<lambda(int16_t, int16_t, const char*, const char*, const char*, uint32_t, uint32_t, touchgfx::colortype)>	104	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:608:6:void ProceduralWidget::drawCloseX(int16_t, int16_t, touchgfx::colortype, const touchgfx::Rect&) const	48	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:616:1:DesktopBackgroundWidget::DesktopBackgroundWidget()	8	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:618:6:void DesktopBackgroundWidget::setPage(uint8_t)	0	static
@@ -92,26 +92,26 @@ C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1134:6
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1143:6:void AppPanelWidget::drawStopwatch(const touchgfx::Rect&) const	160	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1236:6:void AppPanelWidget::drawSpectrum(const touchgfx::Rect&) const	448	static
 C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1404:6:void AppPanelWidget::drawSettings(const touchgfx::Rect&) const	288	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1806:6:void AppPanelWidget::drawCalculator(const touchgfx::Rect&) const	88	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1911:6:void AppPanelWidget::drawCards(const touchgfx::Rect&) const	80	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1972:6:void AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const	104	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2038:6:void AppPanelWidget::drawMusicList(const touchgfx::Rect&) const	1728	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2123:6:void AppPanelWidget::drawMusicPlayer(const touchgfx::Rect&) const	160	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2210:6:void AppPanelWidget::drawMusic(const touchgfx::Rect&) const	0	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2216:6:void AppPanelWidget::drawFiles(const touchgfx::Rect&) const	1752	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2348:6:void AppPanelWidget::drawRecorder(const touchgfx::Rect&) const	144	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2437:6:virtual void AppPanelWidget::draw(const touchgfx::Rect&) const	56	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2473:1:TrackingTouchArea::TrackingTouchArea()	8	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2475:6:void TrackingTouchArea::setOwner(MainView*)	0	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2489:1:MainView::MainView()	56	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2535:6:void MainView::setStripOffset(int16_t)	8	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2560:6:virtual void MainView::handleTickEvent()	1616	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2552:6:void MainView::settleToPage(uint8_t)	0	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2992:6:void MainView::handleTrackingDrag(const touchgfx::DragEvent&)	72	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2483:6:virtual void TrackingTouchArea::handleDragEvent(const touchgfx::DragEvent&)	0	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3114:9:int16_t MainView::hitTestIcon(int16_t, int16_t) const	20	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3126:6:void MainView::openMusicFileAtRow(uint8_t)	1584	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3139:6:void MainView::openApp(uint8_t)	32	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3189:6:void MainView::closeApp()	16	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2673:6:void MainView::handleTrackingClick(const touchgfx::ClickEvent&)	224	static
-C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2477:6:virtual void TrackingTouchArea::handleClickEvent(const touchgfx::ClickEvent&)	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1815:6:void AppPanelWidget::drawCalculator(const touchgfx::Rect&) const	88	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1920:6:void AppPanelWidget::drawCards(const touchgfx::Rect&) const	80	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:1981:6:void AppPanelWidget::drawSystemUsage(const touchgfx::Rect&) const	104	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2047:6:void AppPanelWidget::drawMusicList(const touchgfx::Rect&) const	1728	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2132:6:void AppPanelWidget::drawMusicPlayer(const touchgfx::Rect&) const	160	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2219:6:void AppPanelWidget::drawMusic(const touchgfx::Rect&) const	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2225:6:void AppPanelWidget::drawFiles(const touchgfx::Rect&) const	1752	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2357:6:void AppPanelWidget::drawRecorder(const touchgfx::Rect&) const	144	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2446:6:virtual void AppPanelWidget::draw(const touchgfx::Rect&) const	56	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2482:1:TrackingTouchArea::TrackingTouchArea()	8	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2484:6:void TrackingTouchArea::setOwner(MainView*)	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2498:1:MainView::MainView()	56	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2544:6:void MainView::setStripOffset(int16_t)	8	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2569:6:virtual void MainView::handleTickEvent()	1616	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2561:6:void MainView::settleToPage(uint8_t)	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3006:6:void MainView::handleTrackingDrag(const touchgfx::DragEvent&)	72	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2492:6:virtual void TrackingTouchArea::handleDragEvent(const touchgfx::DragEvent&)	0	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3128:9:int16_t MainView::hitTestIcon(int16_t, int16_t) const	20	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3140:6:void MainView::openMusicFileAtRow(uint8_t)	1584	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3153:6:void MainView::openApp(uint8_t)	32	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:3203:6:void MainView::closeApp()	16	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2682:6:void MainView::handleTrackingClick(const touchgfx::ClickEvent&)	224	static
+C:/Users/Gary/Desktop/f769/f769/TouchGFX/gui/src/main_screen/MainView.cpp:2486:6:virtual void TrackingTouchArea::handleClickEvent(const touchgfx::ClickEvent&)	16	static

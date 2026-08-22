@@ -444,7 +444,7 @@ static uint32_t Player_FillSpdifUpsampledHalf(
   }
 
   /* Clock zero-valued source frames through the causal filters after EOF.
-   * FIR MIN drains its longest 64-sample polyphase history; the legacy FIR
+   * Polyphase FIR modes drain their longest 64-sample history; the legacy FIR
    * emits its 16 delayed anchors. IIR and hybrid modes get a longer finite
    * drain so the recursive response falls below the 16-bit floor and the
    * phase-correction FIR history is cleared. */
@@ -661,7 +661,12 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   if (player_output == USB_AUDIO_OUTPUT_SPDIF)
   {
     const USB_AudioSpdifMode spdif_mode = USB_Audio_GetSpdifMode();
-    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
+    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
+    {
+      SPDIF_WeightedLinearPhaseFir4x_Init(
+          &player_spdif_minphase_fir_upsampler, sample_rate);
+    }
+    else if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5)
     {
       SPDIF_WeightedMinimumPhaseFir4x_Init(
           &player_spdif_minphase_fir_upsampler, sample_rate);
@@ -735,7 +740,9 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
          ((spdif_mode ==
            USB_AUDIO_SPDIF_UPSAMPLE_4X_FIR_MINPHASE_NS5) ||
           (spdif_mode ==
-           USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5))) ? 1U : 0U;
+           USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5) ||
+          (spdif_mode ==
+           USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5))) ? 1U : 0U;
     return (SPDIF_TX_Init(player_spdif_upsample != 0U ?
                           sample_rate * PLAYER_SPDIF_FACTOR : sample_rate,
                           bits_per_sample)

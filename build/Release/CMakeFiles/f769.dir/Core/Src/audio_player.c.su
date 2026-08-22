@@ -4,9 +4,9 @@ C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:124:13:Player_Publish	16
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:232:16:Player_ReadExact	16	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:527:17:Player_FillHalf	88	static,ignoring_inline_asm
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:174:13:Player_SendCommand	8	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:805:16:Player_StartOutput	8	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:757:16:Player_CodecCommand	16	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:820:13:Player_Close	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:812:16:Player_StartOutput	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:764:16:Player_CodecCommand	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:827:13:Player_Close	16	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:148:6:AudioPlayer_GetSnapshot.part.0	16	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:148:6:AudioPlayer_GetSnapshot	0	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:159:9:AudioPlayer_IsBusy	0	static
@@ -16,7 +16,7 @@ C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:202:6:AudioPlayer_Reques
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:209:6:AudioPlayer_RequestSeek	32	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:217:6:AudioPlayer_RequestVolume	32	static
 C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:225:6:AudioPlayer_RequestStop	32	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:836:6:AudioPlayer_Task	840	static
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1139:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	24	static,ignoring_inline_asm
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1156:6:BSP_AUDIO_OUT_TransferComplete_CallBack	24	static,ignoring_inline_asm
-C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1173:6:BSP_AUDIO_OUT_Error_CallBack	8	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:843:6:AudioPlayer_Task	840	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1146:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1163:6:BSP_AUDIO_OUT_TransferComplete_CallBack	24	static,ignoring_inline_asm
+C:/Users/Gary/Desktop/f769/f769/Core/Src/audio_player.c:1180:6:BSP_AUDIO_OUT_Error_CallBack	8	static
