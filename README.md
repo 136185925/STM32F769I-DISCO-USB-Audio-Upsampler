@@ -41,6 +41,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | BES OPEN | 20th-order Bessel IIR + 2nd order Noise shaping | −2.25 dB | Four-phase TPDF + NS2 | mild Nonlinear phase | Highest |
 | BES NS5 | 20th-order Bessel IIR + 5th order optimized Noise shaping | −1 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | FIR MIN | Kaiser β=8.9 windowed-sinc + 5th order optimized Noise shaping | −1.5 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
+| WLS MIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 ---
 
 ## NATIVE
@@ -155,7 +156,7 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 ## 4X BES NS5
 20th-order Bessel IIR with 5th order optimized Noise shaping
 
-## 4X FIR MIN (Recommended)
+## 4X FIR MIN 
 - Kaiser β=8.9 windowed-sinc prototype
 - Real cepstrum conversion to minimum-phase，significantly reduces transient pre-ringing
 - 44.1 kHz：256 taps，output 176.4 kHz
@@ -163,6 +164,15 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 - 4-phase polyphase implementation
 - Input reserve −1.5 dB headroom
 - Finally use optimized NS5 quantization, without affecting the original Phase 0 information
+
+## 4X WLS MIN (Recommended)
+- Continuous-frequency weighted least-squares design
+- Raised-cosine smooth transition band
+- High-weight stopband, optimizing overall image energy
+- FFT-accelerated preconditioned conjugate gradient solver
+- Homomorphic minimum-phase conversion, no linear-phase pre-echo
+- Reuse of the existing double-precision 4-phase polyphase engine
+- Weighted CLS/WLS, passband/stopband weights 1:100
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline,  the filtering algorithm will not change the S/PDIF clock edges.
