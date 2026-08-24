@@ -157,7 +157,7 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 ## 4X BES NS5
 20th-order Bessel IIR with 5th order optimized Noise shaping
 
-## 4X FIR MIN 
+## 4X FIR MIN (Recommended)
 - Kaiser β=8.9 windowed-sinc prototype
 - Real cepstrum conversion to minimum-phase，significantly reduces transient pre-ringing
 - 44.1 kHz：256 taps，output 176.4 kHz
