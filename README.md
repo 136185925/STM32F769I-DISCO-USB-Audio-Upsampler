@@ -43,20 +43,21 @@ The selected setting is saved to the RTC backup register and remains retained af
 | FIR MIN | Kaiser β=8.9 windowed-sinc + 5th order optimized Noise shaping | −1.5 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | WLS MIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | WLS LIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | Linear phase | Highest |
+| WLS LISTEN | constrained continuous-frequency WLS + 5th order optimized Noise shaping | −1.0 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 ---
 
-## NATIVE
+#### NATIVE
 No upsampling,  gain processing,  or dithering is performed.
 Data is sent to S/PDIF at the original sample rate:
 - 44.1 kHz input → 44.1 kHz output
 - 48 kHz input → 48 kHz output
 This mode has the lowest CPU usage and makes the NO modification to the original PCM.
 
-## 4X HOLD
+#### 4X HOLD
 Using the Zero-Order Hold method,  output each input sample point four consecutive times.
 PCM → Repeat each sample 4 times → S/PDIF
 
-## 4X EXACT
+#### 4X EXACT
 Use a 129-point four-phase Nyquist FIR interpolator.
 
 Where:
@@ -68,17 +69,17 @@ Where:
 
 PCM → 4-phase Nyquist FIR → 16-bit quantization → S/PDIF
 
-## 4X -1DB
+#### 4X -1DB
 
 Use the same Nyquist FIR as 4X EXACT,  but uniformly lower all four Phases by 1 dB before final quantization
 
 Less prone to transient clipping than 4X EXACT
 
-## 4X TPDF
+#### 4X TPDF
 On top of 4X -1DB,  add TPDF dither before the final 16-bit quantization.
 PCM → 4-phase Nyquist FIR → −1 dB → four-phase TPDF → 16-bit quantization → S/PDIF
 
-## 4X IIR
+#### 4X IIR
 
 Use zero-stuffing upsampling and a 14th-order Chebyshev-I low-pass IIR.
 
@@ -101,7 +102,7 @@ PCM → −1 dB → insert 3 zero samples → 14th-order Chebyshev-I IIR → fou
 - Transients may produce IIR ringing
 At the end of the WAV file,  256 zero-valued source frames continue to be fed in,  allowing the IIR's recursive response to decay to near the 16-bit noise floor.
 
-## 4X HYBRID
+#### 4X HYBRID
 HYBRID is based on 4X IIR,  with a 32-tap FIR phase equalizer added after the IIR. (64-tap performance overhead is too high)
 
 PCM → −1 dB → 4×zero insertion → 14th-order Chebyshev-I IIR → 32-tap FIR phase equalization → four-phase TPDF → 16-bit quantization → S/PDIF
@@ -133,7 +134,7 @@ The FIR does not replace the IIR low-pass filter,  but instead approximately cor
 - External SDRAM is not used
 At the end of the WAV,  zero values continue to be fed in,  allowing the IIR recursive response to decay,  and the FIR history is cleared.
 
-## 4X HYB NS2
+#### 4X HYB NS2
 Use second-order error feedback: NTF = (1 − z⁻¹)²
 
 Automatically clear noise-shaping history upon saturation
@@ -142,22 +143,22 @@ Does not clear the IIR/FIR filter history, so it will not restart the entire fil
 
 PCM → −1 dB → 4×zero insertion → 14th-order Chebyshev-I IIR → 32-tap FIR phase equalization → four-phase TPDF + 2nd order Noise shaping → 16-bit quantization → S/PDIF
 
-### 4X BTR NS2
+#### 4X BTR NS2
 Replace the Chebyshev filter with a less aggressive butterworth filter，raise the passband cutoff frequency at 44.1kHz from 20k to 22k，at 48kHz from 20k to 24k，reduce phase correction by 35%，to obtain richer musical information
 
-### 4X BTR MIN
+#### 4X BTR MIN
 Remove the 32tap FIR phase correction, because it may introduce pre-echo
 
-### 4X BES MIN
+#### 4X BES MIN
 Replace the 14th-order Butterworth with a 20th-order Bessel IIR to trade computational cost for better phase response and no pre-echo, -3db occurs around 18kHz
 
-### 4X BES OPEN
+#### 4X BES OPEN
 Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，closer to the NOS state
 
-### 4X BES NS5
+#### 4X BES NS5
 20th-order Bessel IIR with 5th order optimized Noise shaping
 
-## 4X FIR MIN (Recommended)
+#### 4X FIR MIN
 - Kaiser β=8.9 windowed-sinc prototype
 - Real cepstrum conversion to minimum-phase，significantly reduces transient pre-ringing
 - 44.1 kHz：256 taps，output 176.4 kHz
@@ -166,7 +167,7 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 - Input reserve −1.5 dB headroom
 - Finally use optimized NS5 quantization, without affecting the original Phase 0 information
 
-## 4X WLS MIN (Recommended)
+#### 4X WLS MIN
 - Continuous-frequency weighted least-squares design
 - Raised-cosine smooth transition band
 - High-weight stopband, optimizing overall image energy
@@ -174,6 +175,12 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 - Homomorphic minimum-phase conversion, no linear-phase pre-echo
 - Reuse of the existing double-precision 4-phase polyphase engine
 - Weighted CLS/WLS, passband/stopband weights 1:100
+
+### 4X WLS LISTEN (Recommended)
+- constrained continuous-frequency WLS
+- Headroom：−1.0 dB
+- Audible passband: 20.5 kHz at 44.1 kHz, 22 kHz at 48 kHz
+- 2× + 2× minimum-phase polyphase
 
 ## 4X WLS LIN 
  Add Linear WLS filter, which will not perform minimum-phase real cepstrum conversion, although I personally prefer minimum-phase, because this sounds the most natural (it does not contain pre-echo, but there will be a slight loss of phase) but I still added the Linear-phase option
