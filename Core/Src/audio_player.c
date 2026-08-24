@@ -6,6 +6,7 @@
 #include "sdmmc.h"
 #include "spdif_iir_upsampler.h"
 #include "spdif_minphase_fir.h"
+#include "spdif_wls_listen.h"
 #include "spdif_tx.h"
 #include "spdif_upsampler.h"
 #include "touch.h"
@@ -86,11 +87,13 @@ static uint8_t player_spdif_hybrid_ns2;
 static uint8_t player_spdif_minphase_ns2;
 static uint8_t player_spdif_minphase_ns5;
 static uint8_t player_spdif_minphase_fir;
+static uint8_t player_spdif_wls_listen;
 static uint32_t player_spdif_status_frame;
 static SPDIF_Upsampler4x player_spdif_upsampler;
 static SPDIF_IirUpsampler4x player_spdif_iir_upsampler;
 static SPDIF_HybridUpsampler4x player_spdif_hybrid_upsampler;
 static SPDIF_MinimumPhaseFir4x player_spdif_minphase_fir_upsampler;
+static SPDIF_WlsListen4x player_spdif_wls_listen_upsampler;
 static uint16_t player_spdif_tail_frames;
 static uint8_t player_last_fill_output_valid;
 
@@ -378,6 +381,11 @@ static uint32_t Player_FillSpdifUpsampledHalf(
       SPDIF_IirUpsampler4x_Process(&player_spdif_iir_upsampler, left, right,
                                    interpolated);
     }
+    else if (player_spdif_wls_listen != 0U)
+    {
+      SPDIF_WlsListen4x_Process(
+          &player_spdif_wls_listen_upsampler, left, right, interpolated);
+    }
     else if (player_spdif_minphase_fir != 0U)
     {
       SPDIF_MinimumPhaseFir4x_Process(
@@ -429,7 +437,10 @@ static uint32_t Player_FillSpdifUpsampledHalf(
       (source_bytes != 0U) &&
       ((loaded_bytes + source_bytes) >= wave->data_bytes))
   {
-    if (player_spdif_minphase_fir != 0U)
+    if (player_spdif_wls_listen != 0U)
+      player_spdif_tail_frames = SPDIF_WlsListen4x_GetTailFrames(
+          &player_spdif_wls_listen_upsampler);
+    else if (player_spdif_minphase_fir != 0U)
       player_spdif_tail_frames = SPDIF_MINPHASE_FIR_TAIL_FRAMES;
     else if ((player_spdif_minphase_ns2 != 0U) ||
         (player_spdif_minphase_ns5 != 0U))
@@ -444,10 +455,9 @@ static uint32_t Player_FillSpdifUpsampledHalf(
   }
 
   /* Clock zero-valued source frames through the causal filters after EOF.
-   * Polyphase FIR modes drain their longest 64-sample history; the legacy FIR
-   * emits its 16 delayed anchors. IIR and hybrid modes get a longer finite
-   * drain so the recursive response falls below the 16-bit floor and the
-   * phase-correction FIR history is cleared. */
+   * WLS LISTEN drains both 2x stages; the single-stage polyphase FIR modes
+   * drain their longest 64-sample history, while the legacy FIR emits its 16
+   * delayed anchors. Recursive filters get a longer finite drain. */
   while ((output_group < groups_needed) && (player_spdif_tail_frames != 0U))
   {
     int16_t interpolated[PLAYER_SPDIF_FACTOR * 2U];
@@ -455,6 +465,11 @@ static uint32_t Player_FillSpdifUpsampledHalf(
     {
       SPDIF_IirUpsampler4x_Process(&player_spdif_iir_upsampler, 0, 0,
                                    interpolated);
+    }
+    else if (player_spdif_wls_listen != 0U)
+    {
+      SPDIF_WlsListen4x_Process(
+          &player_spdif_wls_listen_upsampler, 0, 0, interpolated);
     }
     else if (player_spdif_minphase_fir != 0U)
     {
@@ -654,6 +669,7 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   player_spdif_minphase_ns2 = 0U;
   player_spdif_minphase_ns5 = 0U;
   player_spdif_minphase_fir = 0U;
+  player_spdif_wls_listen = 0U;
   player_spdif_tail_frames = 0U;
   SPDIF_Upsampler4x_Reset(&player_spdif_upsampler);
   SPDIF_IirUpsampler4x_Init(&player_spdif_iir_upsampler, sample_rate);
@@ -661,7 +677,12 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
   if (player_output == USB_AUDIO_OUTPUT_SPDIF)
   {
     const USB_AudioSpdifMode spdif_mode = USB_Audio_GetSpdifMode();
-    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
+    if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LISTEN_NS5)
+    {
+      SPDIF_WlsListen4x_Init(
+          &player_spdif_wls_listen_upsampler, sample_rate);
+    }
+    else if (spdif_mode == USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5)
     {
       SPDIF_WeightedLinearPhaseFir4x_Init(
           &player_spdif_minphase_fir_upsampler, sample_rate);
@@ -743,6 +764,10 @@ static uint8_t Player_CodecInit(uint32_t sample_rate, uint16_t bits_per_sample,
            USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_MINPHASE_NS5) ||
           (spdif_mode ==
            USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5))) ? 1U : 0U;
+    player_spdif_wls_listen =
+        ((player_spdif_upsample != 0U) &&
+         (spdif_mode ==
+          USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LISTEN_NS5)) ? 1U : 0U;
     return (SPDIF_TX_Init(player_spdif_upsample != 0U ?
                           sample_rate * PLAYER_SPDIF_FACTOR : sample_rate,
                           bits_per_sample)

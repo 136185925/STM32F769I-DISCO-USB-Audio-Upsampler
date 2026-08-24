@@ -1,0 +1,4 @@
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_wls_listen.c:208:6:SPDIF_WlsListen4x_Reset	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_wls_listen.c:227:6:SPDIF_WlsListen4x_Init	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_wls_listen.c:250:10:SPDIF_WlsListen4x_GetTailFrames	16	static
+C:/Users/Gary/Desktop/f769/f769/Core/Src/spdif_wls_listen.c:258:6:SPDIF_WlsListen4x_Process	176	static

@@ -34,7 +34,7 @@ typedef struct
 void SPDIF_MinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
                                   uint32_t source_rate);
 /* Weighted constrained/least-squares prototype with 1:100 pass/stop energy
- * weights and -0.3 dB input headroom. The real-time polyphase core is shared. */
+ * weights and -1.0 dB input headroom. The real-time polyphase core is shared. */
 void SPDIF_WeightedMinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
                                           uint32_t source_rate);
 /* Direct Type-II symmetric WLS prototype. This retains constant group delay

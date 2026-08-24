@@ -1529,6 +1529,9 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             const bool wlsLinearNs5 =
                 audio.spdif_mode ==
                     USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5;
+            const bool wlsListenNs5 =
+                audio.spdif_mode ==
+                    USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LISTEN_NS5;
             drawText("S/PDIF MODE", 122,
                      static_cast<int16_t>(378 - offset), 1, muted,
                      contentDirty);
@@ -1542,7 +1545,8 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                         (repeat || exact || headroom || tpdf || iir || hybrid ||
                          hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
                          besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
-                         firMinNs5 || wlsMinNs5 || wlsLinearNs5) ?
+                         firMinNs5 || wlsMinNs5 || wlsLinearNs5 ||
+                         wlsListenNs5) ?
                             track : rgb(40, 113, 132), contentDirty);
             fillRounded(320, modeY1, 96, 29, 8,
                         repeat ? rgb(35, 125, 103) : track, contentDirty);
@@ -1582,11 +1586,15 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
             fillRounded(464, modeY3, 118, 29, 8,
                         wlsLinearNs5 ? rgb(62, 112, 174) : track,
                         contentDirty);
+            fillRounded(586, modeY3, 118, 29, 8,
+                        wlsListenNs5 ? rgb(176, 83, 115) : track,
+                        contentDirty);
             drawText("NATIVE", 250, static_cast<int16_t>(376 - offset), 1,
                      (repeat || exact || headroom || tpdf || iir || hybrid ||
                       hybridNs2 || butterworthNs2 || butterworthMinNs2 ||
                       besselMinNs2 || besselOpenNs2 || besselMinNs5 ||
-                      firMinNs5 || wlsMinNs5 || wlsLinearNs5) ?
+                      firMinNs5 || wlsMinNs5 || wlsLinearNs5 ||
+                      wlsListenNs5) ?
                          muted : white, contentDirty);
             drawText("4X HOLD", 347, static_cast<int16_t>(376 - offset), 1,
                      repeat ? white : muted, contentDirty);
@@ -1618,14 +1626,8 @@ void AppPanelWidget::drawSettings(const Rect& dirty) const
                      wlsMinNs5 ? white : muted, contentDirty);
             drawText("WLS LIN", 502, static_cast<int16_t>(442 - offset), 1,
                      wlsLinearNs5 ? white : muted, contentDirty);
-            const char *firDescription = wlsLinearNs5 ?
-                "LINEAR / -0.3DB / NS5" :
-                (wlsMinNs5 ? "MIN-PHASE / -0.3DB / NS5" :
-                 (firMinNs5 ? "KAISER / -1.5DB / NS5" :
-                              "POLYPHASE FIR / NS5"));
-            drawText(firDescription, 600,
-                     static_cast<int16_t>(442 - offset), 1, muted,
-                     contentDirty);
+            drawText("LISTEN", 627, static_cast<int16_t>(442 - offset), 1,
+                     wlsListenNs5 ? white : muted, contentDirty);
         } else {
             char gainText[5];
             formatPercent(audio.volume, 100U, gainText);
@@ -2965,6 +2967,11 @@ void MainView::handleTrackingClick(const ClickEvent& event)
                            x >= 464 && x <= 584) {
                     USB_Audio_RequestSpdifMode(
                         USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LINEARPHASE_NS5);
+                    appPanel.invalidateSettings();
+                } else if (pressX >= 586 && pressX <= 706 &&
+                           x >= 586 && x <= 706) {
+                    USB_Audio_RequestSpdifMode(
+                        USB_AUDIO_SPDIF_UPSAMPLE_4X_WLS_LISTEN_NS5);
                     appPanel.invalidateSettings();
                 }
             }

@@ -5,7 +5,8 @@
 #include <string.h>
 
 #define SPDIF_MINPHASE_FIR_KAISER_INPUT_GAIN 3.36558057f
-#define SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN    3.86420352f
+#define SPDIF_MINPHASE_FIR_WLS_MIN_INPUT_GAIN 3.56500375f
+#define SPDIF_MINPHASE_FIR_WLS_LINEAR_INPUT_GAIN 3.86420352f
 #define SPDIF_MINPHASE_FIR_DITHER_LEFT_SEED  0x9E3779B9U
 #define SPDIF_MINPHASE_FIR_DITHER_RIGHT_SEED 0x243F6A88U
 
@@ -173,7 +174,7 @@ void SPDIF_WeightedMinimumPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
       SPDIF_WlsFir4x_GetCoefficients(source_rate, &state->taps_per_phase);
   state->noise_shaping_coefficients =
       SPDIF_NoiseShaper5_GetCoefficients(source_rate * 4U);
-  state->input_gain = SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN;
+  state->input_gain = SPDIF_MINPHASE_FIR_WLS_MIN_INPUT_GAIN;
   SPDIF_MinimumPhaseFir4x_Reset(state);
 }
 
@@ -186,7 +187,7 @@ void SPDIF_WeightedLinearPhaseFir4x_Init(SPDIF_MinimumPhaseFir4x *state,
                                            &state->taps_per_phase);
   state->noise_shaping_coefficients =
       SPDIF_NoiseShaper5_GetCoefficients(source_rate * 4U);
-  state->input_gain = SPDIF_MINPHASE_FIR_WLS_INPUT_GAIN;
+  state->input_gain = SPDIF_MINPHASE_FIR_WLS_LINEAR_INPUT_GAIN;
   SPDIF_MinimumPhaseFir4x_Reset(state);
 }
 
