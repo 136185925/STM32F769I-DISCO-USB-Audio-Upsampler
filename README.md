@@ -142,19 +142,19 @@ Does not clear the IIR/FIR filter history, so it will not restart the entire fil
 
 PCM → −1 dB → 4×zero insertion → 14th-order Chebyshev-I IIR → 32-tap FIR phase equalization → four-phase TPDF + 2nd order Noise shaping → 16-bit quantization → S/PDIF
 
-## 4X BTR NS2
+### 4X BTR NS2
 Replace the Chebyshev filter with a less aggressive butterworth filter，raise the passband cutoff frequency at 44.1kHz from 20k to 22k，at 48kHz from 20k to 24k，reduce phase correction by 35%，to obtain richer musical information
 
-## 4X BTR MIN
+### 4X BTR MIN
 Remove the 32tap FIR phase correction, because it may introduce pre-echo
 
-## 4X BES MIN
+### 4X BES MIN
 Replace the 14th-order Butterworth with a 20th-order Bessel IIR to trade computational cost for better phase response and no pre-echo, -3db occurs around 18kHz
 
-## 4X BES OPEN
+### 4X BES OPEN
 Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，closer to the NOS state
 
-## 4X BES NS5
+### 4X BES NS5
 20th-order Bessel IIR with 5th order optimized Noise shaping
 
 ## 4X FIR MIN (Recommended)
