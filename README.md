@@ -42,6 +42,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | BES NS5 | 20th-order Bessel IIR + 5th order optimized Noise shaping | −1 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | FIR MIN | Kaiser β=8.9 windowed-sinc + 5th order optimized Noise shaping | −1.5 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | WLS MIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
+| WLS LIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | Linear phase | Highest |
 ---
 
 ## NATIVE
@@ -156,7 +157,7 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 ## 4X BES NS5
 20th-order Bessel IIR with 5th order optimized Noise shaping
 
-## 4X FIR MIN 
+## 4X FIR MIN (Recommended)
 - Kaiser β=8.9 windowed-sinc prototype
 - Real cepstrum conversion to minimum-phase，significantly reduces transient pre-ringing
 - 44.1 kHz：256 taps，output 176.4 kHz
@@ -173,6 +174,9 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 - Homomorphic minimum-phase conversion, no linear-phase pre-echo
 - Reuse of the existing double-precision 4-phase polyphase engine
 - Weighted CLS/WLS, passband/stopband weights 1:100
+
+## 4X WLS LIN 
+ Add Linear WLS filter, which will not perform minimum-phase real cepstrum conversion, although I personally prefer minimum-phase, because this sounds the most natural (it does not contain pre-echo, but there will be a slight loss of phase) but I still added the Linear-phase option
 
 ## Phase and Clock Jitter
 PLLI2S directly generates the SAI2/S/PDIF clock. As long as the CPU can complete buffer filling before the DMA deadline,  the filtering algorithm will not change the S/PDIF clock edges.
