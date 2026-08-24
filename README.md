@@ -43,7 +43,7 @@ The selected setting is saved to the RTC backup register and remains retained af
 | FIR MIN | Kaiser β=8.9 windowed-sinc + 5th order optimized Noise shaping | −1.5 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | WLS MIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 | WLS LIN | Continuous-frequency weighted least-squares design + 5th order optimized Noise shaping | −0.3 dB | Four-phase TPDF + NS5 | Linear phase | Highest |
-| WLS LISTEN | constrained continuous-frequency WLS + 5th order optimized Noise shaping | −1.0 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
+| WLS LISTEN | Constrained continuous-frequency WLS + 5th order optimized Noise shaping | −1.0 dB | Four-phase TPDF + NS5 | mild Nonlinear phase | Highest |
 ---
 
 #### NATIVE
@@ -177,7 +177,7 @@ Same as BES MIN，but -2.25db to prevent clipping, -3db occurs at >20kHz，close
 - Weighted CLS/WLS, passband/stopband weights 1:100
 
 ### 4X WLS LISTEN (Recommended)
-- constrained continuous-frequency WLS
+- Constrained continuous-frequency WLS
 - Headroom：−1.0 dB
 - Audible passband: 20.5 kHz at 44.1 kHz, 22 kHz at 48 kHz
 - 2× + 2× minimum-phase polyphase
